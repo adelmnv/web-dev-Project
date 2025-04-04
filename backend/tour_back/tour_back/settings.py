@@ -42,6 +42,11 @@ INSTALLED_APPS = [
     'rest_framework',
 ]
 
+# URL endpoint used to access media files in a browser
+MEDIA_URL = '/media/'
+# absolute path on the server where uploaded media files are stored.
+MEDIA_ROOT = BASE_DIR / 'media'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

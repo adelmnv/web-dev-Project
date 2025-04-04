@@ -42,6 +42,7 @@ class Flight(models.Model):
     arrival = models.DateTimeField()
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='flights_from')
     destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='flights_to')
+    icon = models.ImageField(upload_to='flight_icons/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -88,3 +89,13 @@ class Tour(models.Model):
     def clean(self):
         if self.start_date >= self.end_date:
             raise ValidationError("Start date must be before end date.")
+
+
+class Image(models.Model):
+    tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='tour_images/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+
+    def __str__(self):
+        return f"Image for {self.tour.name}"

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import Country, City, MealType, Flight, Hotel, Tour
+from api.models import Country, City, Image, MealType, Flight, Hotel, Tour
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -18,7 +18,7 @@ class MealTypeAdmin(admin.ModelAdmin):
 
 @admin.register(Flight)
 class FlightAdmin(admin.ModelAdmin):
-    list_display = ('id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination', 'created_at', 'updated_at')
+    list_display = ('id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination','icon', 'created_at', 'updated_at')
     search_fields = ('airline', 'flight_number', 'origin__name', 'destination__name')
 
 @admin.register(Hotel)
@@ -30,3 +30,8 @@ class HotelAdmin(admin.ModelAdmin):
 class TourAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'hotel', 'flight', 'price', 'meal_type', 'start_date', 'end_date', 'created_at', 'updated_at')
     search_fields = ('name',)
+
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'image', 'tour')
+    search_fields = ('tour__name',)
