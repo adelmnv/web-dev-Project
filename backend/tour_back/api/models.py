@@ -59,6 +59,7 @@ class Hotel(models.Model):
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='hotels')
     address = models.CharField(max_length=255)
     rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
