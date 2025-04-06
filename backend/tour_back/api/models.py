@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    image = models.ImageField(upload_to='country_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -17,6 +18,7 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='cities')
+    image = models.ImageField(upload_to='city_images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -30,6 +32,8 @@ class City(models.Model):
 
 class MealType(models.Model):
     type = models.CharField(max_length=20, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.type
