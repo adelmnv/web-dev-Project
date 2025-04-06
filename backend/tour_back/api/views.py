@@ -127,7 +127,7 @@ class CityList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CityDetails(APIView):
+class CityDetail(APIView):
     def get_object(self, city_id):
         try:
             return City.objects.get(id=city_id)
@@ -165,7 +165,7 @@ class FlightList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class FlightDetails(APIView):
+class FlightDetail(APIView):
     def get_object(self, flight_id):
         try:
             return Flight.objects.get(id=flight_id)
@@ -203,7 +203,7 @@ class HotelList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class HotelDetails(APIView):
+class HotelDetail(APIView):
     def get_object(self, hotel_id):
         try:
             return Hotel.objects.get(id=hotel_id)
@@ -241,7 +241,7 @@ class TourList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class TourDetails(APIView):
+class TourDetail(APIView):
     def get_object(self, tour_id):
         try:
             return Tour.objects.get(id=tour_id)
@@ -264,4 +264,42 @@ class TourDetails(APIView):
     def delete(self, request, tour_id):
         tour = self.get_object(tour_id)
         tour.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ImageList(APIView):
+    def get(self, request):
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ImageDetail(APIView):
+    def get_object(self, image_id):
+        try:
+            return Image.objects.get(id=image_id)
+        except Image.DoesNotExist as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get(self, request, image_id):
+        image = self.get_object(image_id)
+        serializer = ImageSerializer(image)
+        return Response(serializer.data)
+    
+    def put(self, request, image_id):
+        image = self.get_object(image_id)
+        serializer = ImageSerializer(instance=image, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, image_id):
+        image = self.get_object(image_id)
+        image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
