@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Country, City, Flight, Hotel, Tour, Image, MealType
-from .serializers import CountrySerializer, CitySerializer, FlightSerializer, HotelSerializer, TourSerializer, ImageSerializer, MealTypeSerializer
+from .models import Application, Country, City, Flight, Hotel, Tour, Image, MealType
+from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, FlightSerializer, HotelSerializer, TourSerializer, ImageSerializer, MealTypeSerializer
 
 @api_view(http_method_names=['GET', 'POST'])
 def country_list(request):
@@ -302,4 +302,42 @@ class ImageDetail(APIView):
     def delete(self, request, image_id):
         image = self.get_object(image_id)
         image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class ApplicationList(APIView):
+    def get(self, request):
+        applications = Application.objects.all()
+        serializer = ApplicationSerializer(applications, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = ApplicationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ApplicationDetail(APIView):
+    def get_object(self, application_id):
+        try:
+            return Application.objects.get(id=application_id)
+        except Application.DoesNotExist as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get(self, request, application_id):
+        application = self.get_object(application_id)
+        serializer = ApplicationSerializer(application)
+        return Response(serializer.data)
+    
+    def put(self, request, application_id):
+        application = self.get_object(application_id)
+        serializer = ApplicationSerializer(instance=application, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, application_id):
+        application = self.get_object(application_id)
+        application.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

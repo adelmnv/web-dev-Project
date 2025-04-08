@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import City, Flight, Hotel, Tour, Image
+from .models import Application, City, Flight, Hotel, Tour, Image
 
 class CountrySerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -51,3 +51,9 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'image', 'tour_id', 'created_at', 'updated_at']
+
+class ApplicationSerializer(serializers.ModelSerializer):
+    tour_id = serializers.IntegerField()
+    class Meta:
+        model = Application
+        fields = ['id', 'name', 'email', 'phone', 'tour_id','status', 'created_at', 'updated_at']

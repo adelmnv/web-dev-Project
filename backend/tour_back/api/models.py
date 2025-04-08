@@ -104,3 +104,15 @@ class Image(models.Model):
 
     def __str__(self):
         return f"Image for {self.tour.name}"
+
+class Application(models.Model):
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    email = models.EmailField()
+    tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='applications')
+    status = models.CharField(max_length=20, choices=[('new', 'New'), ('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='new')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+
+    def __str__(self):
+        return f"Application for {self.tour.name}, client: {self.name}"

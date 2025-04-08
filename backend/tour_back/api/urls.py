@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList, TourDetail, ImageList, ImageDetail
+from api.views import ApplicationDetail, ApplicationList, country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList, TourDetail, ImageList, ImageDetail
 
 urlpatterns = [
     path('countries/', country_list, name='country-list'),
@@ -16,6 +16,6 @@ urlpatterns = [
     path('tours/<int:pk>/', TourDetail.as_view(), name='tour-detail'),
     path('images/', ImageList.as_view(), name='image-list'),
     path('images/<int:pk>/', ImageDetail.as_view(), name='image-detail'),
-    
-    
+    path('applications/', ApplicationList.as_view(), name='application-list'),
+    path('applications/<int:pk>/', ApplicationDetail.as_view(), name='application-detail'),
 ]
