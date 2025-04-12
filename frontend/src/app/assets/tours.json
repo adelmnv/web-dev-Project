@@ -1,0 +1,19 @@
+[
+    {
+      "id": 1,
+      "name": "Almaty Adventure",
+      "description": "Explore Almaty's beautiful mountains.",
+      "start_date": "2025-06-01",
+      "end_date": "2025-06-07",
+      "price": 850,
+      "hotel": {
+        "name": "Grand Almaty Hotel",
+        "city": "Almaty"
+      },
+      "flight": {
+        "airline": "Air Astana",
+        "flight_number": "KC123"
+      }
+    }
+  ]
+  
