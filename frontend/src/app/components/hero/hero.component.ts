@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-about',
+  selector: 'app-hero',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  templateUrl: './hero.component.html',
+  styleUrls: ['./hero.component.css']
 })
-export class AboutComponent { }
+export class HeroComponent { }

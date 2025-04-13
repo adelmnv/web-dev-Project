@@ -3,10 +3,12 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  template: `<router-outlet></router-outlet>`,
   imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styles: []
 })
 export class AppComponent {
-  title = 'web-project';
+  title = 'MyTourApp';
 }
+
