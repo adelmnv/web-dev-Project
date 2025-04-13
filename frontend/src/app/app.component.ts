@@ -4,11 +4,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   standalone: true,
-  template: `<router-outlet></router-outlet>`,
   imports: [RouterOutlet],
-  styles: []
+  template: `<router-outlet></router-outlet>`
 })
-export class AppComponent {
-  title = 'MyTourApp';
-}
-
+export class AppComponent {}
