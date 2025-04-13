@@ -7,6 +7,14 @@ class CountrySerializer(serializers.Serializer):
     image = serializers.ImageField()
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.image = validated_data.get('image', instance.image)
+        instance.save()
+        return instance
     
 
 class MealTypeSerializer(serializers.Serializer):
@@ -14,6 +22,13 @@ class MealTypeSerializer(serializers.Serializer):
     type = serializers.CharField()
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
+
+    def create(self, validated_data):
+        return super().create(validated_data)
+    def update(self, instance, validated_data):
+        instance.type = validated_data.get('type', instance.type)
+        instance.save()
+        return instance
 
 
 class CitySerializer(serializers.ModelSerializer):
