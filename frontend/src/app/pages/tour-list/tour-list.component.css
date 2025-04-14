@@ -1,0 +1,120 @@
+/* header.component.css or global styles */
+@import url('https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap');
+
+  
+  /* tours.component.css */
+  .tour-wrapper {
+    background-color: #b3e5fc;
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  h2 {
+    font-family: 'Just Another Hand', cursive;
+    color: #0d47a1;
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .results-count {
+    text-align: center;
+    font-size: 1rem;
+    color: #455a64;
+    margin-bottom: 1.5rem;
+    
+  }
+  
+  .tour-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .tour-box {
+    background: white;
+    display: flex;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    
+  }
+  
+  .tour-img-wrapper {
+    position: relative;
+    width: 180px;
+    
+  }
+  .tour-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff7043;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    
+  }
+  
+  .tour-info {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .tour-info h3 {
+    font-family: 'Just Another Hand', cursive;
+    margin: 0;
+    font-size: 2rem;
+    color: #00796b;
+  }
+  
+  .tour-info .location {
+    font-size: 0.85rem;
+    color: #757575;
+  }
+  .tour-info .desc {
+    font-size: 0.9rem;
+    color: #546e7a;
+    margin: 0.5rem 0;
+  }
+  .labels span {
+    color: #039be5;
+    font-size: 0.75rem;
+    margin-right: 0.8rem;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer .price {
+    font-weight: bold;
+    color: #388e3c;
+  }
+  .footer .duration {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #0288d1;
+  }
+  button {
+    background: #ff7043;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #f4511e;
+  }
+  
