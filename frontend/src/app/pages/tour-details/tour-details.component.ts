@@ -5,13 +5,13 @@ import { TourService } from '../../services/tour.service';
 import { Tour } from '../../models/tour.model';
 import { NgFor } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 @Component({
   standalone: true,
   selector: 'app-tour-details',
   templateUrl: './tour-details.component.html',
   styleUrls: ['./tour-details.component.css'],
-  imports: [CommonModule,RouterModule]
+  imports: [CommonModule,RouterModule,NavbarComponent]
 })
 export class TourDetailsComponent implements OnInit {
   tour!: Tour | undefined;

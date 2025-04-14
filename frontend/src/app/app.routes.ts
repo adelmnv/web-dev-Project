@@ -7,8 +7,9 @@ import { TourDetailsComponent } from './pages/tour-details/tour-details.componen
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
-  { path: 'contact', component: HomeComponent },
+  { path: 'contact', component: ContactComponent },
   { path: 'tours', component: TourListComponent },
   { path: 'tours/:id', component: TourDetailsComponent },
 ];

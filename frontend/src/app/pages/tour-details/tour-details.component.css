@@ -1,162 +1,144 @@
 /* header.component.css or global styles */
+@import url('https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap');
 
 
-.main-header {
-  background-color: #d2783f;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem;
-  color: white;
-}
-.main-header .logo {
-  font-weight: bold;
-  font-size: 1.4rem;
-}
-.main-header input {
-  width: 40%;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: none;
-}
-.main-header nav a {
-  color: white;
-  margin-left: 1.5rem;
-  text-decoration: none;
-}
-.active-link {
-  font-weight: bold;
-  color: #007bff;
-}
-
-.container {
-  max-width: 960px; /* or 800px, adjust as needed */
-  margin: 0 auto;    /* centers the container */
-  padding: 20px;
-  background-color: #fcf4dc;
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
-  border-radius: 10px;
-}
-
-.tour-gallery {
-  position: relative;
-  max-width: 500px;
-  margin-top: 20px;
-}
-
-.image-container {
-  text-align: center;
-}
-
-.tour-image {
-  width: 80%; /* Smaller size for the image */
-  max-width: 400px;
-  height: auto;
-  border-radius: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.tour-image:hover {
-  transform: scale(1.05);
-}
-
-.gallery-controls {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.prev-btn, .next-btn {
-  background-color: rgba(255, 145, 0, 0.8);
-  color: rgb(255, 255, 255);
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 24px;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.prev-btn {
-  left: 10px;
-}
-
-.next-btn {
-  right: 10px;
-}
-
-.prev-btn:hover, .next-btn:hover {
-  background-color: #12a6dc;
-}
-
-.prev-btn:disabled, .next-btn:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-.tour-description, .tour-duration {
-  margin-top: 20px;
-}
-
-.tour-info {
-  margin-top: 30px;
-}
-
-.flight-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.flight-table th, .flight-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.flight-table th {
-  background-color: #f4f4f4;
-}
-
-.hotel-gallery {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.hotel-image-container {
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.hotel-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.footer-links {
-  margin-top: 30px;
-}
-
-.footer-links ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.footer-links li {
-  margin-bottom: 10px;
-}
-
-.footer-links a {
-  text-decoration: none;
-  color: #007bff;
-}
-
-.footer-links a:hover {
-  text-decoration: underline;
-}
+  .active-link {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .container {
+    max-width: 960px; /* or 800px, adjust as needed */
+    margin: 0 auto;    /* centers the container */
+    padding: 20px;
+    background-color: #fcf4dc;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    border-radius: 10px;
+  }
+  .tour-details-header h1 {
+    font-family: 'Just Another Hand', cursive;
+  }
+  .tour-gallery {
+    position: relative;
+    max-width: 500px;
+    margin-top: 20px;
+  }
+  
+  .image-container {
+    text-align: center;
+  }
+  
+  .tour-image {
+    width: 80%; /* Smaller size for the image */
+    max-width: 400px;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .tour-image:hover {
+    transform: scale(1.05);
+  }
+  
+  .gallery-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .prev-btn, .next-btn {
+    background-color: rgba(255, 145, 0, 0.8);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
+  .prev-btn:hover, .next-btn:hover {
+    background-color: #12a6dc;
+  }
+  
+  .prev-btn:disabled, .next-btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  .tour-description, .tour-duration {
+    margin-top: 20px;
+  }
+  
+  .tour-info {
+    margin-top: 30px;
+    
+  }
+  
+  .flight-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .flight-table th, .flight-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .flight-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .hotel-gallery {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .hotel-image-container {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+  
+  .hotel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .footer-links {
+    margin-top: 30px;
+  }
+  
+  .footer-links ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  

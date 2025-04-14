@@ -3,13 +3,13 @@ import { TourService } from '../../services/tour.service';
 import { Tour } from '../../models/tour.model';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { NavbarComponent } from '../../components/navbar/navbar.component';
 @Component({
   standalone: true,
   selector: 'app-tour-list',
   templateUrl: './tour-list.component.html',
   styleUrls: ['./tour-list.component.css'],
-  imports: [RouterModule, CommonModule] // Added CommonModule for *ngFor
+  imports: [RouterModule, CommonModule, NavbarComponent,] // Added CommonModule for *ngFor
 })
 export class TourListComponent implements OnInit {
   tours: Tour[] = [];
