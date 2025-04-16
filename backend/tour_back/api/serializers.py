@@ -72,3 +72,8 @@ class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = ['id', 'name', 'email', 'phone', 'tour_id','status', 'created_at', 'updated_at']
+
+class CustomRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Application
+        fields = ['name', 'email', 'message', 'created_at', 'updated_at']

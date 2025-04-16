@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 class Country(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    image = models.ImageField(upload_to='country_images/', blank=True, null=True)
+    image = models.CharField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -18,7 +18,7 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='cities')
-    image = models.ImageField(upload_to='city_images/', blank=True, null=True)
+    image = models.CharField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -46,7 +46,7 @@ class Flight(models.Model):
     arrival = models.DateTimeField()
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='flights_from')
     destination = models.ForeignKey(City, on_delete=models.CASCADE, related_name='flights_to')
-    icon = models.ImageField(upload_to='flight_icons/', blank=True, null=True)
+    icon = models.CharField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -98,7 +98,7 @@ class Tour(models.Model):
 
 class Image(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='tour_images/')
+    image = models.CharField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
@@ -116,3 +116,13 @@ class Application(models.Model):
 
     def __str__(self):
         return f"Application for {self.tour.name}, client: {self.name}"
+
+class CustomRequest(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+
+    def __str__(self):
+        return f"Custom request from {self.name}"

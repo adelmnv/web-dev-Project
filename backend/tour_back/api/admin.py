@@ -1,5 +1,5 @@
 from django.contrib import admin
-from api.models import Application, Country, City, Image, MealType, Flight, Hotel, Tour
+from api.models import Application, Country, City, CustomRequest, Image, MealType, Flight, Hotel, Tour
 
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
@@ -39,3 +39,8 @@ class ImageAdmin(admin.ModelAdmin):
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'email', 'phone', 'tour','status', 'created_at', 'updated_at')
     search_fields = ('name', 'email', 'phone', 'tour_id')
+
+@admin.register(CustomRequest)
+class CustomRequestAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'email', 'message', 'created_at', 'updated_at')
+    search_fields = ('name', 'email')

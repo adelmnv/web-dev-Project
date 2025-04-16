@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Application, Country, City, Flight, Hotel, Tour, Image, MealType
-from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, FlightSerializer, HotelSerializer, TourSerializer, ImageSerializer, MealTypeSerializer
+from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, Image, MealType
+from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, CustomRequestSerializer, FlightSerializer, HotelSerializer, TourSerializer, ImageSerializer, MealTypeSerializer
 
 @api_view(http_method_names=['GET', 'POST'])
 def country_list(request):
@@ -355,3 +355,42 @@ class LogoutView(APIView):
             return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomRequestList(APIView):
+    def get(self, request):
+        custom_requests = CustomRequest.objects.all()
+        serializer = CustomRequestSerializer(custom_requests, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = CustomRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomRequestDetail(APIView):
+    def get_object(self, request_id):
+        try:
+            return CustomRequest.objects.get(id=request_id)
+        except CustomRequest.DoesNotExist as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get(self, request, request_id):
+        custom_request = self.get_object(request_id)
+        serializer = CustomRequestSerializer(custom_request)
+        return Response(serializer.data)
+    
+    def put(self, request, request_id):
+        custom_request = self.get_object(request_id)
+        serializer = CustomRequestSerializer(instance=custom_request, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, request_id):
+        custom_request = self.get_object(request_id)
+        custom_request.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+       
