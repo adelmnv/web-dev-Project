@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Application, City, Flight, Hotel, Tour, Image, Country
+from .models import Application, City, Flight, Hotel, Tour, Country
 
 class CountrySerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
     image = serializers.CharField(allow_null=True, required=False)
-    created_at = serializers.DateTimeField()
-    updated_at = serializers.DateTimeField()
+    created_at = serializers.DateTimeField(read_only=True)
+    updated_at = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         return Country.objects.create(**validated_data)
@@ -19,7 +19,7 @@ class CountrySerializer(serializers.Serializer):
     
 
 class MealTypeSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     type = serializers.CharField()
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
@@ -33,9 +33,10 @@ class MealTypeSerializer(serializers.Serializer):
 
 
 class CitySerializer(serializers.ModelSerializer):
+    country_id = serializers.IntegerField()
     class Meta:
         model = City
-        fields = ['id', 'name', 'country', 'image', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'country_id', 'images', 'created_at', 'updated_at']
 
 
 class FlightSerializer(serializers.ModelSerializer):
@@ -59,14 +60,7 @@ class TourSerializer(serializers.ModelSerializer):
     meal_type_id = serializers.IntegerField()
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'hotel_id', 'flight_id', 'price', 'meal_type_id', 'start_date', 'end_date', 'created_at', 'updated_at']
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    tour_id = serializers.IntegerField()
-    class Meta:
-        model = Image
-        fields = ['id', 'image', 'tour_id', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'hotel_id', 'flight_id', 'price', 'meal_type_id','images', 'start_date', 'end_date', 'created_at', 'updated_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
     tour_id = serializers.IntegerField()

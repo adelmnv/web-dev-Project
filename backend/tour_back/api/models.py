@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import JSONField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 
@@ -18,9 +19,9 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='cities')
-    image = models.CharField(blank=True, null=True)
+    images = JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) 
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "City"
@@ -37,7 +38,7 @@ class MealType(models.Model):
 
     def __str__(self):
         return self.type
-
+        
 
 class Flight(models.Model):
     airline = models.CharField(max_length=100)
@@ -80,6 +81,7 @@ class Tour(models.Model):
     flight = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='tours')
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='tours')
     meal_type = models.ForeignKey(MealType, on_delete=models.CASCADE, related_name='tours')
+    images = JSONField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
@@ -94,16 +96,6 @@ class Tour(models.Model):
     def clean(self):
         if self.start_date >= self.end_date:
             raise ValidationError("Start date must be before end date.")
-
-
-class Image(models.Model):
-    tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='images')
-    image = models.CharField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) 
-
-    def __str__(self):
-        return f"Image for {self.tour.name}"
 
 class Application(models.Model):
     name = models.CharField(max_length=100)

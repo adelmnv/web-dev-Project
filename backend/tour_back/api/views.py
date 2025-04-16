@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, Image, MealType
-from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, CustomRequestSerializer, FlightSerializer, HotelSerializer, TourSerializer, ImageSerializer, MealTypeSerializer
+from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, MealType
+from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, CustomRequestSerializer, FlightSerializer, HotelSerializer, TourSerializer, MealTypeSerializer
 
 @api_view(http_method_names=['GET', 'POST'])
 def country_list(request):
@@ -79,41 +79,41 @@ def meal_type_detail(request, meal_type_id):
         meal_type.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-@api_view(http_method_names=['GET', 'POST'])
-def image_list(request):
-    if request.method == 'GET':
-        images = Image.objects.all()
-        serializer = ImageSerializer(images, many=True)
-        return Response(serializer.data)
+# @api_view(http_method_names=['GET', 'POST'])
+# def image_list(request):
+#     if request.method == 'GET':
+#         images = Image.objects.all()
+#         serializer = ImageSerializer(images, many=True)
+#         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        serializer = ImageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'POST':
+#         serializer = ImageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(http_method_names=['GET', 'PUT', 'DELETE'])
-def image_detail(request, image_id):
-    try:
-        image = Image.objects.get(id=image_id)
-    except Image.DoesNotExist as e:
-        return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+# @api_view(http_method_names=['GET', 'PUT', 'DELETE'])
+# def image_detail(request, image_id):
+#     try:
+#         image = Image.objects.get(id=image_id)
+#     except Image.DoesNotExist as e:
+#         return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
-        serializer = ImageSerializer(image)
-        return Response(serializer.data)
+#     if request.method == 'GET':
+#         serializer = ImageSerializer(image)
+#         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        serializer = ImageSerializer(instance=image, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     elif request.method == 'PUT':
+#         serializer = ImageSerializer(instance=image, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
-        image.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     elif request.method == 'DELETE':
+#         image.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CityList(APIView):
     def get(self, request):
@@ -267,43 +267,43 @@ class TourDetail(APIView):
         tour.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class ImageList(APIView):
-    def get(self, request):
-        images = Image.objects.all()
-        serializer = ImageSerializer(images, many=True)
-        return Response(serializer.data)
+# class ImageList(APIView):
+#     def get(self, request):
+#         images = Image.objects.all()
+#         serializer = ImageSerializer(images, many=True)
+#         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = ImageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = ImageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class ImageDetail(APIView):
-    def get_object(self, image_id):
-        try:
-            return Image.objects.get(id=image_id)
-        except Image.DoesNotExist as e:
-            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+# class ImageDetail(APIView):
+#     def get_object(self, image_id):
+#         try:
+#             return Image.objects.get(id=image_id)
+#         except Image.DoesNotExist as e:
+#             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
     
-    def get(self, request, image_id):
-        image = self.get_object(image_id)
-        serializer = ImageSerializer(image)
-        return Response(serializer.data)
+#     def get(self, request, image_id):
+#         image = self.get_object(image_id)
+#         serializer = ImageSerializer(image)
+#         return Response(serializer.data)
     
-    def put(self, request, image_id):
-        image = self.get_object(image_id)
-        serializer = ImageSerializer(instance=image, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def put(self, request, image_id):
+#         image = self.get_object(image_id)
+#         serializer = ImageSerializer(instance=image, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request, image_id):
-        image = self.get_object(image_id)
-        image.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self, request, image_id):
+#         image = self.get_object(image_id)
+#         image.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
     
 class ApplicationList(APIView):
     def get(self, request):
