@@ -51,7 +51,7 @@ class HotelSerializer(serializers.ModelSerializer):
     city_id = serializers.IntegerField()
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'city_id', 'address', 'rating', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'city_id', 'address', 'rating','description', 'images', 'created_at', 'updated_at'] 
 
 
 class TourSerializer(serializers.ModelSerializer):

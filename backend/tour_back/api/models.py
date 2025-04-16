@@ -38,7 +38,7 @@ class MealType(models.Model):
 
     def __str__(self):
         return self.type
-        
+
 
 class Flight(models.Model):
     airline = models.CharField(max_length=100)
@@ -65,6 +65,7 @@ class Hotel(models.Model):
     address = models.CharField(max_length=255)
     rating = models.FloatField(validators=[MinValueValidator(1.0), MaxValueValidator(5.0)])
     description = models.TextField(null=True, blank=True)
+    images = JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 

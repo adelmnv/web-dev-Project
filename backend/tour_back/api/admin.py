@@ -27,7 +27,7 @@ class FlightAdmin(admin.ModelAdmin):
 
 @admin.register(Hotel)
 class HotelAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'city', 'address', 'rating', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'city', 'address', 'rating','images', 'created_at', 'updated_at')
     search_fields = ('name', 'city__name', 'address')
     list_display_links = ('id', 'name')
 
