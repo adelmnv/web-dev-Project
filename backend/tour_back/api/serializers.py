@@ -1,15 +1,16 @@
 from rest_framework import serializers
-from .models import Application, City, Flight, Hotel, Tour, Image
+from .models import Application, City, Flight, Hotel, Tour, Image, Country
 
 class CountrySerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
-    image = serializers.ImageField()
+    image = serializers.CharField(allow_null=True, required=False)
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
 
     def create(self, validated_data):
-        return super().create(validated_data)
+        return Country.objects.create(**validated_data)
+
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.image = validated_data.get('image', instance.image)
