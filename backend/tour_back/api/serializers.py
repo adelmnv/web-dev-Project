@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Application, City, Flight, Hotel, Tour, Country
 
+#comment 
+
 class CountrySerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
