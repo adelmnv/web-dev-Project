@@ -9,14 +9,14 @@ import { Tour, Country, City, MealType, Flight, Hotel } from '../models/tour.mod
 export class TourService {
   // Database of countries
   private countries: Country[] = [
-    { id: 1, name: 'France', image: 'https://images.unsplash.com/photo-1503917988258-f87a78e3c995' },
+    { id: 1, name: 'France', image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o=' },
     { id: 2, name: 'Italy', image: 'https://images.unsplash.com/photo-1491562021826-11439dee0a7e' },
     { id: 3, name: 'Japan', image: 'https://images.unsplash.com/photo-1492571350019-22de08371fd3' }
   ];
 
   // Database of cities
   private cities: City[] = [
-    { id: 1, name: 'Paris', country: this.countries[0], image: 'https://images.unsplash.com/photo-1431274172761-fca41d930114' },
+    { id: 1, name: 'Paris', country: this.countries[0], image: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o=' },
     { id: 2, name: 'Nice', country: this.countries[0], image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad' },
     { id: 3, name: 'Rome', country: this.countries[1], image: 'https://images.unsplash.com/photo-1529260830199-42c24126f198' },
     { id: 4, name: 'Venice', country: this.countries[1], image: 'https://images.unsplash.com/photo-1514890547357-a9ee288728e0' },
@@ -76,9 +76,9 @@ export class TourService {
       rating: 5,
       description: 'Luxury hotel with views of the Eiffel Tower',
       images: [
-        'https://images.unsplash.com/photo-1431274172761-fca41d930114',
-        'https://images.unsplash.com/photo-1499856871958-5b9627545d1a',
-        'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216'
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o='
       ]
       
     },
@@ -137,9 +137,9 @@ export class TourService {
       meal_type: this.mealTypes[1],
       is_active: true,
       images: [
-        'https://images.unsplash.com/photo-1431274172761-fca41d930114',
-        'https://images.unsplash.com/photo-1499856871958-5b9627545d1a',
-        'https://images.unsplash.com/photo-1523531294919-4bcd7c65e216'
+        'https://i0.wp.com/theluxurytravelexpert.com/wp-content/uploads/2018/02/THE-FAIRMONT-HOTEL-VIER-JAHRESZEITEN-HAMBURG.jpg?ssl=1',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o=',
+        'https://cf.bstatic.com/xdata/images/hotel/max1024x768/663985071.jpg?k=c3bc28ef8da4947d60d54d565b0b36fd09836f91931f12b60eb536dd416a0f08&o='
       ]
     },
     {
