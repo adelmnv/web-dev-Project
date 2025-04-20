@@ -1,5 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 
 import { AppComponent } from './app/app.component';
 import { HomeComponent } from './app/pages/home/home.component';
@@ -20,7 +21,8 @@ bootstrapApplication(AppComponent, {
       { path: 'reviews', component: ReviewsComponent },
       { path: 'about', component: AboutComponent },
       { path: 'contact', component: ContactComponent },
-      { path: '**', redirectTo: '' }
-    ])
-  ]
-}).catch(err => console.error(err));
+      { path: '**', redirectTo: '' },
+    ]),
+    provideHttpClient(),
+  ],
+}).catch((err) => console.error(err));

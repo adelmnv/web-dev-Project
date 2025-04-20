@@ -8,7 +8,16 @@ from django.http import JsonResponse
 from api.models import Flight
 from django.db.models import Q
 from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, MealType
-from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, CustomRequestSerializer, FlightSerializer, HotelSerializer, TourSerializer, MealTypeSerializer
+from .serializers import (
+    ApplicationSerializer,
+    CountrySerializer,
+    CitySerializer,
+    CustomRequestSerializer,
+    FlightSerializer,
+    HotelSerializer,
+    TourSerializer,
+    MealTypeSerializer,  # Ensure this is correctly imported
+)
 
 @api_view(http_method_names=['GET', 'POST'])
 def country_list(request):
@@ -252,7 +261,7 @@ class TourDetail(APIView):
         except Tour.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
     
-    def get(self, tour_id):
+    def get(self, request, tour_id):
         tour = self.get_object(tour_id)
         serializer = TourSerializer(tour)
         return Response(serializer.data)
@@ -404,21 +413,35 @@ def find_flights(request):
     departure_date = request.GET.get('departure_date')  # Format: YYYY-MM-DD
     return_date = request.GET.get('return_date')  # Format: YYYY-MM-DD
 
+    # Log the received parameters
+    print(f"Origin ID: {origin_id}, Destination ID: {destination_id}, Departure Date: {departure_date}, Return Date: {return_date}")
+
     if not all([origin_id, destination_id, departure_date, return_date]):
         return JsonResponse({'error': 'Missing required parameters: origin_id, destination_id, departure_date, return_date'}, status=400)
 
+    # Validate that the departure date is earlier than the return date
+    if departure_date >= return_date:
+        return JsonResponse({'error': 'Departure date must be earlier than return date'}, status=400)
+
     try:
+        # Fetch only the first 3 flights to the destination
         flights_to = Flight.objects.filter(
             origin_id=origin_id,
             destination_id=destination_id,
-            departure__date=departure_date
-        )
+            departure__date=departure_date  # Match only the date part
+        )[:3]  # Limit to the first 3 results
 
+        # Fetch only the first 3 return flights
         flights_back = Flight.objects.filter(
             origin_id=destination_id,
             destination_id=origin_id,
-            departure__date=return_date
-        )
+            departure__date=return_date  # Match only the date part
+        )[:3]  # Limit to the first 3 results
+
+        
+
+        # Log the number of flights found
+        print(f"Flights to: {len(flights_to)}, Flights back: {len(flights_back)}")
 
         flights_to_data = FlightSerializer(flights_to, many=True).data
         flights_back_data = FlightSerializer(flights_back, many=True).data
@@ -429,6 +452,8 @@ def find_flights(request):
         })
 
     except Exception as e:
+        # Log the exception
+        print(f"Error in find_flights: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(http_method_names=['GET'])

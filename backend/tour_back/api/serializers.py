@@ -1,77 +1,48 @@
 from rest_framework import serializers
-from .models import Application, City, Flight, Hotel, Tour, Country 
+from .models import Application, City, Flight, Hotel, Tour, Country, MealType
 
-class CountrySerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField()
-    image = serializers.CharField(allow_null=True, required=False)
-    created_at = serializers.DateTimeField(read_only=True)
-    updated_at = serializers.DateTimeField(read_only=True)
-
-    def create(self, validated_data):
-        return Country.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.image = validated_data.get('image', instance.image)
-        instance.save()
-        return instance
-    
-
-class MealTypeSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    type = serializers.CharField()
-    description = serializers.CharField(allow_null=True, required=False)
-    created_at = serializers.DateTimeField()
-    updated_at = serializers.DateTimeField()
-
-    def create(self, validated_data):
-        return super().create(validated_data)
-    def update(self, instance, validated_data):
-        instance.type = validated_data.get('type', instance.type)
-        instance.save()
-        return instance
-
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'image', 'created_at', 'updated_at']
 
 class CitySerializer(serializers.ModelSerializer):
-    country_id = serializers.IntegerField()
+    country = CountrySerializer(read_only=True)  # Include nested country details
     class Meta:
         model = City
-        fields = ['id', 'name', 'country_id', 'images', 'created_at', 'updated_at']
-
-
-class FlightSerializer(serializers.ModelSerializer):
-    origin_id = serializers.IntegerField()
-    destination_id = serializers.IntegerField()
-    class Meta:
-        model = Flight
-        fields = ['id', 'airline', 'flight_number', 'departure', 'arrival','origin_id', 'destination_id', 'icon', 'created_at', 'updated_at']
-
+        fields = ['id', 'name', 'country', 'images', 'created_at', 'updated_at']
 
 class HotelSerializer(serializers.ModelSerializer):
-    city_id = serializers.IntegerField()
+    city = CitySerializer(read_only=True)  # Include nested city details
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'city_id', 'address', 'rating','description', 'images', 'created_at', 'updated_at'] 
-
+        fields = ['id', 'name', 'city', 'address', 'rating', 'description', 'images', 'created_at', 'updated_at']
 
 class TourSerializer(serializers.ModelSerializer):
-    hotel_id = serializers.IntegerField()
-    meal_type_id = serializers.IntegerField()
+    hotel = HotelSerializer(read_only=True)  # Include nested hotel details
+    meal_type = serializers.CharField(source='meal_type.description', read_only=True)  # Include meal type details
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'hotel_id', 'price', 'meal_type_id', 'duration', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'hotel', 'price', 'meal_type', 'duration','description', 'created_at', 'updated_at']
+
+class FlightSerializer(serializers.ModelSerializer):
+    origin_id = serializers.IntegerField(source='origin.id', read_only=True)  # Include origin_id
+    destination_id = serializers.IntegerField(source='destination.id', read_only=True)  # Include destination_id
+    origin = CitySerializer(read_only=True)  # Include nested origin city details
+    destination = CitySerializer(read_only=True)  # Include nested destination city details
+
+    class Meta:
+        model = Flight
+        fields = ['id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination', 'origin_id', 'destination_id', 'icon', 'created_at', 'updated_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    tour_id = serializers.IntegerField()
-    flights_to = serializers.PrimaryKeyRelatedField(many=True, queryset=Flight.objects.all())  # Many-to-Many field
-    flights_back = serializers.PrimaryKeyRelatedField(many=True, queryset=Flight.objects.all())  # Many-to-Many field
-    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)  # Read-only field
-
+    tour = TourSerializer(read_only=True)  # Include nested tour details
+    flights_to = FlightSerializer(many=True, read_only=True)  # Include nested flights to details
+    flights_back = FlightSerializer(many=True, read_only=True)  # Include nested flights back details
     class Meta:
         model = Application
         fields = [
-            'id', 'name', 'email', 'phone', 'tour_id', 'flights_to', 'flights_back',
+            'id', 'name', 'email', 'phone', 'tour', 'flights_to', 'flights_back',
             'total_price', 'status', 'created_at', 'updated_at'
         ]
 
@@ -79,3 +50,8 @@ class CustomRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = ['name', 'email', 'message', 'created_at', 'updated_at']
+
+class MealTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MealType
+        fields = ['id', 'type', 'description', 'created_at', 'updated_at']

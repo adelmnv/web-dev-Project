@@ -1,30 +1,23 @@
 <app-navbar></app-navbar>
-  <!-- tours.component.html -->
-  <section class="tour-wrapper">
-    <p class="results-count">{{ tours.length }} results</p>
-  
-    <div class="tour-grid">
-      <div *ngFor="let tour of tours" class="tour-box">
-        <div class="tour-img-wrapper">
-          <img [src]="tour.images[0]" alt="{{ tour.name }}" />
-          <span class="badge" *ngIf="tour.price < 1200">20% OFF</span>
-        </div>
-        <div class="tour-info">
-          <h3>{{ tour.name }}</h3>
-          <p class="desc">{{ tour.description }}</p>
-          <div class="labels">
-            <span>Best Price Guarantee</span>
-            <span>Free Cancellation</span>
-          </div>
-          <div class="footer">
-            <p class="duration">2 Days 1 Night</p>
-            <div>
-              <p class="price">From {{ tour.price | currency:'USD' }}</p>
-              <button (click)="viewDetails(tour.id)">View Details</button>
-            </div>
-          </div>
-        </div>
+<!-- tours.component.html -->
+<section class="tour-wrapper">
+  <p class="results-count">{{ tours.length }} results</p>
+
+  <div class="tour-grid">
+    <div *ngFor="let tour of tours" class="tour-card">
+      <img
+        *ngIf="tour?.hotel?.images"
+        [src]="tour.hotel.images[0]"
+        alt="Tour image"
+      />
+      <div *ngIf="!(tour?.hotel?.images)">
+        No images available
       </div>
+      <h3>{{ tour?.name }}</h3>
+      <p>{{ tour?.description }}</p>
+      <button *ngIf="tour?.id !== undefined" (click)="viewDetails(tour.id)">
+        View Details
+      </button>
     </div>
-  </section>
-  
+  </div>
+</section>

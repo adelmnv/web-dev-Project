@@ -8,22 +8,24 @@ export interface Country {
     id: number;
     name: string;
     country: Country;
-    image: string;
+    images: string[];
   }
   
   export interface MealType {
     id: number;
     type: string;
+    description: string;
   }
   
   export interface Flight {
     id: number;
     airline: string;
     flight_number: string;
-    departure: string;
-    arrival: string;
+    departure: Date;
+    arrival: Date;
     origin: City;
     destination: City;
+    prcie: number;
     icon: string;
   }
   
@@ -41,13 +43,10 @@ export interface Country {
     id: number;
     name: string;
     description: string;
-    start_date: string;
-    end_date: string;
+    duration: number;
     price: number;
-    flight: Flight;
     hotel: Hotel;
     meal_type: MealType;
     is_active: boolean;
-    images: string[];
   }
   
