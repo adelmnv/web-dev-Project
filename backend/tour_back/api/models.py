@@ -33,6 +33,7 @@ class City(models.Model):
 
 class MealType(models.Model):
     type = models.CharField(max_length=20, unique=True)
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -42,7 +43,7 @@ class MealType(models.Model):
 
 class Flight(models.Model):
     airline = models.CharField(max_length=100)
-    flight_number = models.CharField(max_length=10, unique=True)
+    flight_number = models.CharField(max_length=10)
     departure = models.DateTimeField()
     arrival = models.DateTimeField()
     origin = models.ForeignKey(City, on_delete=models.CASCADE, related_name='flights_from')
@@ -77,18 +78,16 @@ class Hotel(models.Model):
 class Tour(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    duration = models.IntegerField(validators=[MinValueValidator(1)], null=True, blank=True)  # Duration in days
     price = models.DecimalField(max_digits=10, decimal_places=2)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='tours')
     meal_type = models.ForeignKey(MealType, on_delete=models.CASCADE, related_name='tours')
-    images = JSONField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
 
     def __str__(self):
-        return f"{self.name} ({self.start_date} - {self.end_date})"
+        return f"{self.name} ({self.duration} days)"
 
     def delete(self, *args, **kwargs):
         self.is_active = False
@@ -97,6 +96,11 @@ class Tour(models.Model):
     def clean(self):
         if self.start_date >= self.end_date:
             raise ValidationError("Start date must be before end date.")
+        
+    # def find_appropriate_flights(self):
+    #     flights_to = Flight.objects.filter(departure__date=self.start_date)
+    #     flights_back = Flight.objects.filter(arrival__date=self.end_date)
+    #     return flights_to, flights_back
 
 class Application(models.Model):
     name = models.CharField(max_length=100)

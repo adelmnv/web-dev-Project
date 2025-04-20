@@ -15,13 +15,13 @@ class CityAdmin(admin.ModelAdmin):
 
 @admin.register(MealType)
 class MealTypeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'type')
+    list_display = ('id', 'type', 'description', 'created_at', 'updated_at')
     search_fields = ('type',)
     list_display_links = ('id', 'type')
 
 @admin.register(Flight)
 class FlightAdmin(admin.ModelAdmin):
-    list_display = ('id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination','icon', 'created_at', 'updated_at')
+    list_display = ('id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination','price', 'icon', 'created_at', 'updated_at')
     search_fields = ('airline', 'flight_number', 'origin__name', 'destination__name')
     list_display_links = ('id', 'airline')
 
@@ -33,7 +33,7 @@ class HotelAdmin(admin.ModelAdmin):
 
 @admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'hotel', 'price', 'meal_type', 'start_date', 'end_date','images', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'hotel', 'price', 'meal_type', 'duration', 'created_at', 'updated_at')
     search_fields = ('name',)
     list_display_links = ('id', 'name')
 

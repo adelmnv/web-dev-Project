@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from .models import Application, City, Flight, Hotel, Tour, Country
-
-#comment 
+from .models import Application, City, Flight, Hotel, Tour, Country 
 
 class CountrySerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
@@ -23,6 +21,7 @@ class CountrySerializer(serializers.Serializer):
 class MealTypeSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     type = serializers.CharField()
+    description = serializers.CharField(allow_null=True, required=False)
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
 
@@ -58,17 +57,23 @@ class HotelSerializer(serializers.ModelSerializer):
 
 class TourSerializer(serializers.ModelSerializer):
     hotel_id = serializers.IntegerField()
-    flight_id = serializers.IntegerField()
     meal_type_id = serializers.IntegerField()
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'hotel_id', 'flight_id', 'price', 'meal_type_id','images', 'start_date', 'end_date', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'hotel_id', 'price', 'meal_type_id', 'duration', 'created_at', 'updated_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
     tour_id = serializers.IntegerField()
+    flights_to = serializers.PrimaryKeyRelatedField(many=True, queryset=Flight.objects.all())  # Many-to-Many field
+    flights_back = serializers.PrimaryKeyRelatedField(many=True, queryset=Flight.objects.all())  # Many-to-Many field
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)  # Read-only field
+
     class Meta:
         model = Application
-        fields = ['id', 'name', 'email', 'phone', 'tour_id','status', 'created_at', 'updated_at']
+        fields = [
+            'id', 'name', 'email', 'phone', 'tour_id', 'flights_to', 'flights_back',
+            'total_price', 'status', 'created_at', 'updated_at'
+        ]
 
 class CustomRequestSerializer(serializers.ModelSerializer):
     class Meta:
