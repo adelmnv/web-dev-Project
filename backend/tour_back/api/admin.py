@@ -33,13 +33,13 @@ class HotelAdmin(admin.ModelAdmin):
 
 @admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'hotel', 'flight', 'price', 'meal_type', 'start_date', 'end_date','images', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'hotel', 'price', 'meal_type', 'start_date', 'end_date','images', 'created_at', 'updated_at')
     search_fields = ('name',)
     list_display_links = ('id', 'name')
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'phone', 'tour','status', 'created_at', 'updated_at')
+    list_display = ('id', 'name', 'email', 'phone', 'tour', 'flight_to', 'flight_back', 'total_price', 'status', 'created_at', 'updated_at')
     search_fields = ('name', 'email', 'phone', 'tour_id')
     list_display_links = ('id', 'name')
 
