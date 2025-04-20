@@ -4,6 +4,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import JsonResponse
+from api.models import Flight
+from django.db.models import Q
 from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, MealType
 from .serializers import ApplicationSerializer, CountrySerializer, CitySerializer, CustomRequestSerializer, FlightSerializer, HotelSerializer, TourSerializer, MealTypeSerializer
 
@@ -393,4 +396,63 @@ class CustomRequestDetail(APIView):
         custom_request = self.get_object(request_id)
         custom_request.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-       
+
+@api_view(http_method_names=['GET'])
+def find_flights(request):
+    origin_id = request.GET.get('origin_id')
+    destination_id = request.GET.get('destination_id')
+    departure_date = request.GET.get('departure_date')  # Format: YYYY-MM-DD
+    return_date = request.GET.get('return_date')  # Format: YYYY-MM-DD
+
+    if not all([origin_id, destination_id, departure_date, return_date]):
+        return JsonResponse({'error': 'Missing required parameters: origin_id, destination_id, departure_date, return_date'}, status=400)
+
+    try:
+        flights_to = Flight.objects.filter(
+            origin_id=origin_id,
+            destination_id=destination_id,
+            departure__date=departure_date
+        )
+
+        flights_back = Flight.objects.filter(
+            origin_id=destination_id,
+            destination_id=origin_id,
+            departure__date=return_date
+        )
+
+        flights_to_data = FlightSerializer(flights_to, many=True).data
+        flights_back_data = FlightSerializer(flights_back, many=True).data
+
+        return JsonResponse({
+            'flights_to': flights_to_data,
+            'flights_back': flights_back_data
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@api_view(http_method_names=['GET'])
+def find_tours(request):
+    meal_type_id = request.GET.get('meal_type_id')
+    duration = request.GET.get('duration')
+    city_id = request.GET.get('city_id')
+
+    if not any([meal_type_id, duration, city_id]):
+        return JsonResponse({'error': 'At least one parameter (meal_type_id, duration, city_id) is required.'}, status=400)
+
+    try:
+        filters = {}
+        if meal_type_id:
+            filters['meal_type_id'] = meal_type_id
+        if duration:
+            filters['duration'] = duration
+        if city_id:
+            filters['hotel__city_id'] = city_id
+
+        tours = Tour.objects.filter(**filters)
+
+        serializer = TourSerializer(tours, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

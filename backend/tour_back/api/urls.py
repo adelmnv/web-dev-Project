@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import ApplicationDetail, ApplicationList, CityDetail, CityList, country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList, TourDetail, LogoutView, CustomRequestList, CustomRequestDetail
+from api.views import ApplicationDetail, ApplicationList, CityDetail, CityList, country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList, TourDetail, LogoutView, CustomRequestList, CustomRequestDetail, find_flights, find_tours
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -20,6 +20,9 @@ urlpatterns = [
     path('applications/<int:pk>/', ApplicationDetail.as_view(), name='application-detail'),
     path('custom-requests/', CustomRequestList.as_view(), name='custom-request-list'),
     path('custom-requests/<int:pk>/', CustomRequestDetail.as_view(), name='custom-request-detail'),
+    
+    path('find-flights/', find_flights, name='find-flights'),
+    path('find-tours/', find_tours, name='find-tours'),
 
     path('login/', TokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
