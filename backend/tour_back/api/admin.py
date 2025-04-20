@@ -39,9 +39,9 @@ class TourAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'phone', 'tour', 'flight_to', 'flight_back', 'total_price', 'status', 'created_at', 'updated_at')
-    search_fields = ('name', 'email', 'phone', 'tour_id')
-    list_display_links = ('id', 'name')
+    list_display = ('id', 'name', 'email', 'phone', 'tour', 'total_price', 'status', 'created_at', 'updated_at')
+    filter_horizontal = ('flights_to', 'flights_back')
+    search_fields = ('name', 'email', 'phone', 'tour__name')
 
 @admin.register(CustomRequest)
 class CustomRequestAdmin(admin.ModelAdmin):

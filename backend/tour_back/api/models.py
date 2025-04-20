@@ -103,8 +103,8 @@ class Application(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField()
     tour = models.ForeignKey(Tour, on_delete=models.CASCADE, related_name='applications')
-    flight_to = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='applications_to', null=True, blank=True)
-    flight_back = models.ForeignKey(Flight, on_delete=models.CASCADE, related_name='applications_back', null=True, blank=True)
+    flights_to = models.ManyToManyField(Flight, related_name='applications_to', blank=True)  # Multiple flights to destination
+    flights_back = models.ManyToManyField(Flight, related_name='applications_back', blank=True)  # Multiple flights back home
     total_price = models.DecimalField(max_digits=10, decimal_places=2, editable=False, default=0)
     status = models.CharField(max_length=20, choices=[('new', 'New'), ('pending', 'Pending'), ('approved', 'Approved'), ('rejected', 'Rejected')], default='new')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -114,7 +114,10 @@ class Application(models.Model):
         return f"Application for {self.tour.name}, client: {self.name}"
 
     def calculate_total_price(self):
-        return self.tour.price + self.flight_to.price + self.flight_back.price
+        tour_price = self.tour.price
+        flights_to_price = sum(flight.price for flight in self.flights_to.all())
+        flights_back_price = sum(flight.price for flight in self.flights_back.all())
+        return tour_price + flights_to_price + flights_back_price
 
     def save(self, *args, **kwargs):
         self.total_price = self.calculate_total_price()
