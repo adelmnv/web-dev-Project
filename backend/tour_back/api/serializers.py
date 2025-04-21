@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Application, City, Flight, Hotel, Tour, Country, MealType
+from .models import Application, City, Flight, Hotel, Tour, Country,CustomRequest, MealType
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -48,7 +48,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
 class CustomRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Application
+        model = CustomRequest 
         fields = ['name', 'email', 'message', 'created_at', 'updated_at']
 
 class MealTypeSerializer(serializers.ModelSerializer):

@@ -4,6 +4,8 @@ import { AboutComponent } from './pages/about/about.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { TourListComponent } from './pages/tour-list/tour-list.component';
 import { TourDetailsComponent } from './pages/tour-details/tour-details.component';
+import { LoginComponent } from './pages/login/login.component';          
+import { RequestsComponent } from './pages/requests/requests.component'; 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,4 +14,6 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'tours', component: TourListComponent },
   { path: 'tours/:id', component: TourDetailsComponent },
+  { path: 'login', component: LoginComponent },      
+  { path: 'requests', component: RequestsComponent }, 
 ];

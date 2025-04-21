@@ -62,6 +62,8 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
+    'http://localhost:53658',
+
 ]
 
 ROOT_URLCONF = 'tour_back.urls'
