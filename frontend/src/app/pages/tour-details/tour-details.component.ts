@@ -90,4 +90,5 @@ export class TourDetailsComponent implements OnInit {
         (this.currentImageIndex - 1 + this.images.length) % this.images.length;
     }
   }
+  
 }

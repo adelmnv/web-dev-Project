@@ -35,7 +35,6 @@
         </div>
       </div>
 
-      <p class="tour-description">{{ tour.description }}</p>
       <div class="tour-duration">
         <strong>Duration:</strong> {{ tour.duration }} |
         <strong>Group Size:</strong> 10 people
@@ -115,6 +114,9 @@
       </div>
     </div>
 
-    <button (click)="goBack()" class="back-button">Go Back</button>
+    <div class="buttons-container">
+      <button (click)="goBack()" class="back-button">Go Back</button>
+      <button (click) = "goBack()" class="book-button">Book Tour</button>
+    </div>
   </div>
 </div>
