@@ -26,7 +26,7 @@
   
     <label>Meal Type:</label>
     <select [(ngModel)]="selectedMealTypeId">
-      <option *ngFor="let meal of mealTypes" [value]="meal.id">{{ meal.name }}</option>
+      <option *ngFor="let meal of mealTypes" [value]="meal.id">{{ meal.description }}</option>
     </select>
   
     <button (click)="applyFilters()">Apply Filters</button>
@@ -72,6 +72,7 @@
           <div class="badges">
             <span>Best Price Guarantee</span>
             <span>Free Cancellation</span>
+            <span>{{tour?.meal_type}}</span>
           </div>
         </div>
 

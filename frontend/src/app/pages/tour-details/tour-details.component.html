@@ -46,11 +46,20 @@
         <p>{{ tour.description }}</p>
 
         <h4>Meal Type: {{ tour.meal_type }}</h4>
-        <h4>Price for tour (without flight) {{tour.price}}$</h4>
+        <h4>Price for tour (without flight) {{ tour.price }}$</h4>
 
         <!-- Flights From Origin to Destination -->
         <h4>Flights: To</h4>
-        <table class="flight-table">
+        <div
+          *ngIf="flightsTo.length === 0 && connectingFlightsTo.length === 0"
+          class="no-flights-message"
+        >
+          No parameters were provided for searching flights.
+        </div>
+        <table
+          *ngIf="flightsTo.length > 0 || connectingFlightsTo.length > 0"
+          class="flight-table"
+        >
           <thead>
             <tr>
               <th>Select</th>
@@ -137,7 +146,16 @@
 
         <!-- Flights From Destination to Origin -->
         <h4>Flights: Back</h4>
-        <table class="flight-table">
+        <div
+          *ngIf="flightsBack.length === 0 && connectingFlightsBack.length === 0"
+          class="no-flights-message"
+        >
+          No parameters were provided for searching flights.
+        </div>
+        <table
+          *ngIf="flightsBack.length > 0 || connectingFlightsBack.length > 0"
+          class="flight-table"
+        >
           <thead>
             <tr>
               <th>Select</th>
@@ -228,7 +246,7 @@
         </p>
         <p><strong>Address:</strong>{{ tour.hotel.address }}</p>
         <p><strong>Rating:</strong> {{ tour.hotel.rating }} stars</p>
-        <p>{{tour.hotel.description}}</p>
+        <p>{{ tour.hotel.description }}</p>
 
         <!-- Hotel Photo Gallery -->
         <h4>Hotel Photos</h4>

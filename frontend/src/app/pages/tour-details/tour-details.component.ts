@@ -27,6 +27,8 @@ export class TourDetailsComponent implements OnInit {
   selectedFlightBack: Flight | { firstLeg: Flight; secondLeg: Flight } | null =
     null;
 
+    tourDetails: any
+
   constructor(
     private route: ActivatedRoute,
     private tourService: TourService,
@@ -34,17 +36,25 @@ export class TourDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const data = localStorage.getItem('tourDetails');
+    if (data) {
+      this.tourDetails = JSON.parse(data);
+      console.log('Tour details from localStorage:', this.tourDetails); // Debug log
+    } else {
+      console.error('No tour details found in localStorage'); // Debug log
+    }
+
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.tourService.getTourById(id).subscribe((tour) => {
       this.tour = tour;
       console.log('Tour details:', this.tour); // Debug log
 
-      const originId = 5; // Default origin city ID
-      const destinationId = this.tour?.hotel?.city?.id || 0; // Destination city ID from the tour
-      const departureDate = '2025-04-30'; // Default departure date
-      const returnDate = '2025-05-07'; // Default return date
+      const originId = this.tourDetails.selectedOriginId;
+      const destinationId = this.tour?.hotel?.city?.id || 0;
+      const departureDate = this.tourDetails.selectedDepartureDate;
+      const returnDate = this.tourDetails.selectedReturnDate;
 
-      if (destinationId) {
+      if (destinationId && originId && departureDate && returnDate) {
         this.tourService
           .findFlights(originId, destinationId, departureDate, returnDate)
           .subscribe((flights) => {
