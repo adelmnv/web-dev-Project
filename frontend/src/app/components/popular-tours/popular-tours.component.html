@@ -1,71 +1,52 @@
 <section class="popular-tours" id="popular-tours">
   <div class="container">
     <h2>Find Popular Tours</h2>
+
     <div class="tour-cards">
-      <!-- Карточка 1: Iceland Cultural Walking Tour -->
-      <div class="tour-card">
-        <img class="tour-image" src="/assets/iceland.jpg" alt="Iceland Cultural Walking Tour" />
-        <p class="tour-subtitle">South, Iceland</p>
-        <h3 class="tour-title">Iceland Cultural Walking Tour</h3>
-        <div class="tour-info">
-          <div class="info-item">
-            <span class="info-value">7</span>
-            <span class="info-label">days</span>
-          </div>
-          <div class="info-item">
-            <span class="info-value">4.8</span>
-            <span class="info-label">(512)</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">From</span>
-            <span class="info-value price">$1850</span>
-          </div>
+      <div *ngFor="let tour of tours; let i = index" class="tour-card">
+        
+        <!-- Tour Image -->
+        <div class="tour-img-wrapper">
+          <img
+            [src]="tour.hotel.images[i % tour.hotel.images.length]"
+            alt="{{ tour?.name }}"
+            class="tour-image"
+        />
         </div>
-      </div>
-      <!-- Карточка 2: Grand Canyon Expedition -->
-      <div class="tour-card">
-        <img class="tour-image" src="/assets/grand-canyon.jpg" alt="Grand Canyon Expedition" />
-        <p class="tour-subtitle">Arizona, USA</p>
-        <h3 class="tour-title">Grand Canyon Expedition</h3>
-        <div class="tour-info">
-          <div class="info-item">
-            <span class="info-value">5</span>
-            <span class="info-label">days</span>
-          </div>
-          <div class="info-item">
-            <span class="info-value">4.7</span>
-            <span class="info-label">(378)</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">From</span>
-            <span class="info-value price">$1299</span>
-          </div>
+        <div *ngIf="!tour?.hotel?.images?.length">
+          No images available
         </div>
-      </div>
-      <!-- Карточка 3: Paris City Highlights Tour -->
-      <div class="tour-card">
-        <img class="tour-image" src="/assets/paris.jpg" alt="Paris City Highlights Tour" />
-        <p class="tour-subtitle">Paris, France</p>
-        <h3 class="tour-title">Paris City Highlights Tour</h3>
+
+        <!-- Location -->
+        <p class="tour-subtitle">{{ tour?.hotel?.city?.name }}, {{ tour?.hotel?.city?.country?.name }}</p>
+
+        <!-- Title -->
+        <h3 class="tour-title">{{ tour?.name }}</h3>
+
+        <!-- Info -->
         <div class="tour-info">
           <div class="info-item">
-            <span class="info-value">3</span>
+            <span class="info-value">{{ tour?.duration }}</span>
             <span class="info-label">days</span>
           </div>
+
           <div class="info-item">
-            <span class="info-value">4.9</span>
-            <span class="info-label">(645)</span>
+            <!-- Star rating -->
+            <div class="rating-stars">
+            </div>
           </div>
+
           <div class="info-item">
             <span class="info-label">From</span>
-            <span class="info-value price">$999</span>
+            <span class="info-value price">${{ tour?.price }}</span>
           </div>
         </div>
       </div>
     </div>
-    <!-- Кнопка "See All Offers" -->
-    <div class="see-all">
-      <a href="/tours" class="btn">See All Offers</a>
-    </div>
+
+   <!-- Кнопка "See All Offers" -->
+   <div class="see-all">
+    <a href="/tours" class="btn">See All Offers</a>
+  </div>
   </div>
 </section>

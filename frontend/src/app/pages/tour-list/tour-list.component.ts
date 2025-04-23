@@ -5,6 +5,7 @@ import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms'
+
 @Component({
   standalone: true,
   selector: 'app-tour-list',
