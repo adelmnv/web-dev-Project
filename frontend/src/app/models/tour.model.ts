@@ -25,7 +25,7 @@ export interface Country {
     arrival: Date;
     origin: City;
     destination: City;
-    prcie: number;
+    price: number;
     icon: string;
   }
   

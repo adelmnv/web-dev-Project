@@ -18,13 +18,12 @@ export class TourListComponent implements OnInit {
   loading: boolean = true;
   searchQuery: string = '';
   flights: Flight[] = []
-  selectedDestination?: string;
+
   selectedDepartureDate?: Date;
-  selectedArrivalDate?: Date;
+  selectedReturnDate?: Date;
 
   selectedOriginId?: number;
   selectedDestinationId?: number;
-  selectedReturnDate?: string;
   selectedMealTypeId?: number;
 
   mealTypes: any[] = [];
@@ -100,6 +99,13 @@ getRandomHotelImage(tour: any): string | null {
 
   viewDetails(tourId: number | undefined): void {
     if (tourId !== undefined) {
+      const tourDetails = {
+        selectedDepartureDate: this.selectedDepartureDate,
+        selectedReturnDate: this.selectedReturnDate,
+        selectedOriginId: this.selectedOriginId,
+        selectedDestinationId: this.selectedDestinationId,
+      }
+      localStorage.setItem('tourDetails', JSON.stringify(tourDetails));
       this.router.navigate(['/tours', tourId]);
     } else {
       console.error('Invalid tour ID:', tourId);
