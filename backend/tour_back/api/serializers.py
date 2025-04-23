@@ -33,7 +33,7 @@ class FlightSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Flight
-        fields = ['id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination', 'origin_id', 'destination_id', 'icon', 'created_at', 'updated_at']
+        fields = ['id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination', 'origin_id', 'destination_id','price', 'icon', 'created_at', 'updated_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
     tour = TourSerializer(read_only=True)  # Include nested tour details

@@ -36,8 +36,7 @@
       </div>
 
       <div class="tour-duration">
-        <strong>Duration:</strong> {{ tour.duration }} |
-        <strong>Group Size:</strong> 10 people
+        <strong>Duration:</strong> {{ tour.duration }} days
       </div>
     </div>
 
@@ -46,48 +45,178 @@
         <h4>Tour Overview</h4>
         <p>{{ tour.description }}</p>
 
-        <h4>Tour Highlights</h4>
-        <ul>
-          <li>Experience the thrill of a speedboat to Phi Phi Islands</li>
-          <li>Be amazed by the variety of marine life in the archipelago</li>
-        </ul>
+        <h4>Meal Type: {{ tour.meal_type }}</h4>
+        <h4>Price for tour (without flight) {{tour.price}}$</h4>
 
-        <h4>Meal Type: {{tour.meal_type}}</h4>
-
-        <!-- Flight Details in Table -->
-        <h4>Flight Options</h4>
+        <!-- Flights From Origin to Destination -->
+        <h4>Flights: To</h4>
         <table class="flight-table">
           <thead>
             <tr>
               <th>Select</th>
-              <th>Airline (To)</th>
-              <th>Flight Number (To)</th>
-              <th>Departure (To)</th>
-              <th>Arrival (To)</th>
-              <th>Airline (Back)</th>
-              <th>Flight Number (Back)</th>
-              <th>Departure (Back)</th>
-              <th>Arrival (Back)</th>
+              <th>Flight Number</th>
+              <th>Airline</th>
+              <th>Departure</th>
+              <th>Arrival</th>
+              <th>Price ($)</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let flightPair of flightPairs; let i = index">
+            <!-- Direct Flights -->
+            <tr *ngFor="let flight of flightsTo">
               <td>
                 <input
                   type="radio"
-                  name="flightPair"
-                  [value]="i"
-                  (change)="selectFlightPair(flightPair)"
+                  name="flightTo"
+                  [value]="flight"
+                  (change)="selectFlightTo(flight)"
                 />
               </td>
-              <td>{{ flightPair.to.airline }}</td>
-              <td>{{ flightPair.to.flight_number }}</td>
-              <td>{{ flightPair.to.departure|date: 'dd.MM.yyyy HH:mm' }}</td>
-              <td>{{ flightPair.to.arrival|date: 'dd.MM.yyyy HH:mm' }}</td>
-              <td>{{ flightPair.back.airline }}</td>
-              <td>{{ flightPair.back.flight_number }}</td>
-              <td>{{ flightPair.back.departure|date: 'dd.MM.yyyy HH:mm' }}</td>
-              <td>{{ flightPair.back.arrival|date: 'dd.MM.yyyy HH:mm' }}</td>
+              <td>{{ flight.flight_number }}</td>
+              <td>{{ flight.airline }}</td>
+              <td>
+                {{ flight.departure | date : "dd.MM.yyyy HH:mm" }}
+                {{ flight.origin.name }}
+              </td>
+              <td>
+                {{ flight.arrival | date : "dd.MM.yyyy HH:mm" }}
+                {{ flight.destination.name }}
+              </td>
+              <td>{{ flight.price }}</td>
+            </tr>
+            <!-- Connecting Flights -->
+            <tr *ngFor="let connection of connectingFlightsTo">
+              <td>
+                <input
+                  type="radio"
+                  name="flightTo"
+                  [value]="connection"
+                  (change)="selectConnectingFlightTo(connection)"
+                />
+              </td>
+              <ng-container *ngIf="connection.firstLeg && connection.secondLeg">
+                <td>
+                  ({{ connection.firstLeg.flight_number }})<br />
+                  ({{ connection.secondLeg.flight_number }})
+                </td>
+                <td>
+                  <strong>First Leg:</strong>
+                  {{ connection.firstLeg.airline }}<br />
+                  <strong>Second Leg:</strong>
+                  {{ connection.secondLeg.airline }}
+                </td>
+                <td>
+                  {{
+                    connection.firstLeg.departure | date : "dd.MM.yyyy HH:mm"
+                  }}
+                  {{ connection.firstLeg.origin.name }}<br />
+                  {{
+                    connection.secondLeg.departure | date : "dd.MM.yyyy HH:mm"
+                  }}
+                  {{ connection.secondLeg.origin.name }}
+                </td>
+                <td>
+                  {{ connection.firstLeg.arrival | date : "dd.MM.yyyy HH:mm" }}
+                  {{ connection.firstLeg.destination.name }}
+                  <br />
+                  {{ connection.secondLeg.arrival | date : "dd.MM.yyyy HH:mm" }}
+                  {{ connection.secondLeg.destination.name }}
+                </td>
+                <td>
+                  {{ +connection.firstLeg.price + +connection.secondLeg.price }}
+                </td>
+              </ng-container>
+              <ng-container
+                *ngIf="!connection.firstLeg || !connection.secondLeg"
+              >
+                <em>Invalid connection data</em>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Flights From Destination to Origin -->
+        <h4>Flights: Back</h4>
+        <table class="flight-table">
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>Flight Number</th>
+              <th>Airline</th>
+              <th>Departure</th>
+              <th>Arrival</th>
+              <th>Price ($)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Direct Flights -->
+            <tr *ngFor="let flight of flightsBack">
+              <td>
+                <input
+                  type="radio"
+                  name="flightBack"
+                  [value]="flight"
+                  (change)="selectFlightBack(flight)"
+                />
+              </td>
+              <td>{{ flight.flight_number }}</td>
+              <td>{{ flight.airline }}</td>
+              <td>
+                {{ flight.departure | date : "dd.MM.yyyy HH:mm" }}
+                {{ flight.origin.name }}
+              </td>
+              <td>
+                {{ flight.arrival | date : "dd.MM.yyyy HH:mm" }}
+                {{ flight.destination.name }}
+              </td>
+              <td>{{ flight.price }}</td>
+            </tr>
+            <!-- Connecting Flights -->
+            <tr *ngFor="let connection of connectingFlightsBack">
+              <td>
+                <input
+                  type="radio"
+                  name="flightBack"
+                  [value]="connection"
+                  (change)="selectConnectingFlightBack(connection)"
+                />
+              </td>
+              <ng-container *ngIf="connection.firstLeg && connection.secondLeg">
+                <td>
+                  ({{ connection.firstLeg.flight_number }})<br />
+                  ({{ connection.secondLeg.flight_number }})
+                </td>
+                <td>
+                  <strong>First Leg:</strong>
+                  {{ connection.firstLeg.airline }}<br />
+                  <strong>Second Leg:</strong>
+                  {{ connection.secondLeg.airline }}
+                </td>
+                <td>
+                  {{
+                    connection.firstLeg.departure | date : "dd.MM.yyyy HH:mm"
+                  }}
+                  {{ connection.firstLeg.origin.name }}<br />
+                  {{
+                    connection.secondLeg.departure | date : "dd.MM.yyyy HH:mm"
+                  }}
+                  {{ connection.secondLeg.origin.name }}
+                </td>
+                <td>
+                  {{ connection.firstLeg.arrival | date : "dd.MM.yyyy HH:mm" }}
+                  {{ connection.firstLeg.destination.name }}<br />
+                  {{ connection.secondLeg.arrival | date : "dd.MM.yyyy HH:mm" }}
+                  {{ connection.secondLeg.destination.name }}
+                </td>
+                <td>
+                  {{ +connection.firstLeg.price + +connection.secondLeg.price }}
+                </td>
+              </ng-container>
+              <ng-container
+                *ngIf="!connection.firstLeg || !connection.secondLeg"
+              >
+                <em>Invalid connection data</em>
+              </ng-container>
             </tr>
           </tbody>
         </table>
@@ -97,9 +226,9 @@
         <p>
           <strong>{{ tour.hotel.name }}</strong>
         </p>
-        <p>{{ tour.hotel.address }}</p>
-        <p>{{ tour.hotel.city.name }}, {{ tour.hotel.city.country.name }}</p>
+        <p><strong>Address:</strong>{{ tour.hotel.address }}</p>
         <p><strong>Rating:</strong> {{ tour.hotel.rating }} stars</p>
+        <p>{{tour.hotel.description}}</p>
 
         <!-- Hotel Photo Gallery -->
         <h4>Hotel Photos</h4>
@@ -116,7 +245,7 @@
 
     <div class="buttons-container">
       <button (click)="goBack()" class="back-button">Go Back</button>
-      <button (click) = "goBack()" class="book-button">Book Tour</button>
+      <button (click)="goBack()" class="book-button">Book Tour</button>
     </div>
   </div>
 </div>

@@ -91,42 +91,6 @@ def meal_type_detail(request, meal_type_id):
         meal_type.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# @api_view(http_method_names=['GET', 'POST'])
-# def image_list(request):
-#     if request.method == 'GET':
-#         images = Image.objects.all()
-#         serializer = ImageSerializer(images, many=True)
-#         return Response(serializer.data)
-
-#     elif request.method == 'POST':
-#         serializer = ImageSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @api_view(http_method_names=['GET', 'PUT', 'DELETE'])
-# def image_detail(request, image_id):
-#     try:
-#         image = Image.objects.get(id=image_id)
-#     except Image.DoesNotExist as e:
-#         return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-#     if request.method == 'GET':
-#         serializer = ImageSerializer(image)
-#         return Response(serializer.data)
-
-#     elif request.method == 'PUT':
-#         serializer = ImageSerializer(instance=image, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     elif request.method == 'DELETE':
-#         image.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
 class CityList(APIView):
     def get(self, request):
         cities = City.objects.all()
@@ -279,44 +243,6 @@ class TourDetail(APIView):
         tour.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-# class ImageList(APIView):
-#     def get(self, request):
-#         images = Image.objects.all()
-#         serializer = ImageSerializer(images, many=True)
-#         return Response(serializer.data)
-
-#     def post(self, request):
-#         serializer = ImageSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class ImageDetail(APIView):
-#     def get_object(self, image_id):
-#         try:
-#             return Image.objects.get(id=image_id)
-#         except Image.DoesNotExist as e:
-#             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-    
-#     def get(self, request, image_id):
-#         image = self.get_object(image_id)
-#         serializer = ImageSerializer(image)
-#         return Response(serializer.data)
-    
-#     def put(self, request, image_id):
-#         image = self.get_object(image_id)
-#         serializer = ImageSerializer(instance=image, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-#     def delete(self, request, image_id):
-#         image = self.get_object(image_id)
-#         image.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 class ApplicationList(APIView):
     def get(self, request):
         applications = Application.objects.all()
@@ -417,38 +343,102 @@ def find_flights(request):
     print(f"Origin ID: {origin_id}, Destination ID: {destination_id}, Departure Date: {departure_date}, Return Date: {return_date}")
 
     if not all([origin_id, destination_id, departure_date, return_date]):
-        return JsonResponse({'error': 'Missing required parameters: origin_id, destination_id, departure_date, return_date'}, status=400)
+        return JsonResponse({'error': 'All parameters: origin_id, destination_id, departure_date, return_date are required.'}, status=400)
 
     # Validate that the departure date is earlier than the return date
     if departure_date >= return_date:
         return JsonResponse({'error': 'Departure date must be earlier than return date'}, status=400)
 
     try:
-        # Fetch only the first 3 flights to the destination
+        # Fetch only the first 3 direct flights to the destination
         flights_to = Flight.objects.filter(
             origin_id=origin_id,
             destination_id=destination_id,
             departure__date=departure_date  # Match only the date part
         )[:3]  # Limit to the first 3 results
 
-        # Fetch only the first 3 return flights
+        # Fetch only the first 3 direct return flights
         flights_back = Flight.objects.filter(
             origin_id=destination_id,
             destination_id=origin_id,
             departure__date=return_date  # Match only the date part
         )[:3]  # Limit to the first 3 results
 
-        
+        # If no direct flights are found, search for connecting flights
+        if not flights_to.exists():
+            connecting_flights_to = Flight.objects.filter(
+                origin_id=origin_id,
+                departure__date=departure_date
+            ).exclude(destination_id=origin_id)  # Exclude flights returning to the origin
+
+            connecting_flights_to = [
+                {
+                    'first_leg': first_leg,
+                    'second_leg': second_leg
+                }
+                for first_leg in connecting_flights_to
+                for second_leg in Flight.objects.filter(
+                    origin_id=first_leg.destination_id,
+                    destination_id=destination_id,
+                    departure__date=departure_date
+                )
+                if first_leg.arrival < second_leg.departure  # Ensure connection timing is valid
+            ][:3]  # Limit to the first 3 connecting options
+
+        else:
+            connecting_flights_to = []
+
+        if not flights_back.exists():
+            connecting_flights_back = Flight.objects.filter(
+                origin_id=destination_id,
+                departure__date=return_date
+            ).exclude(destination_id=destination_id)  # Exclude flights returning to the destination
+
+            connecting_flights_back = [
+                {
+                    'first_leg': first_leg,
+                    'second_leg': second_leg
+                }
+                for first_leg in connecting_flights_back
+                for second_leg in Flight.objects.filter(
+                    origin_id=first_leg.destination_id,
+                    destination_id=origin_id,
+                    departure__date=return_date
+                )
+                if first_leg.arrival < second_leg.departure  # Ensure connection timing is valid
+            ][:3]  # Limit to the first 3 connecting options
+
+        else:
+            connecting_flights_back = []
 
         # Log the number of flights found
-        print(f"Flights to: {len(flights_to)}, Flights back: {len(flights_back)}")
+        print(f"Direct Flights to: {len(flights_to)}, Connecting Flights to: {len(connecting_flights_to)}")
+        print(f"Direct Flights back: {len(flights_back)}, Connecting Flights back: {len(connecting_flights_back)}")
 
         flights_to_data = FlightSerializer(flights_to, many=True).data
         flights_back_data = FlightSerializer(flights_back, many=True).data
 
+        connecting_flights_to_data = [
+            {
+                'first_leg': FlightSerializer(flight['first_leg']).data,
+                'second_leg': FlightSerializer(flight['second_leg']).data
+            }
+            for flight in connecting_flights_to
+        ]
+
+        connecting_flights_back_data = [
+            {
+                'first_leg': FlightSerializer(flight['first_leg']).data,
+                'second_leg': FlightSerializer(flight['second_leg']).data
+            }
+            for flight in connecting_flights_back
+        ]
+
         return JsonResponse({
             'flights_to': flights_to_data,
-            'flights_back': flights_back_data
+            'connecting_flights_to': connecting_flights_to_data,
+            'flights_back': flights_back_data,
+            'connecting_flights_back': connecting_flights_back_data
         })
 
     except Exception as e:
