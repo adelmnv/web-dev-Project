@@ -1,0 +1,40 @@
+<section class="book">
+    <div class="container">
+      <h2>Book Your Tour</h2>
+      <form (ngSubmit)="submitBooking()" #bookingForm="ngForm">
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          [(ngModel)]="bookingData.name"
+          required
+        />
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          [(ngModel)]="bookingData.phone"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          [(ngModel)]="bookingData.email"
+          required
+        />
+        <button type="submit" [disabled]="!bookingForm.valid">Send Booking</button>
+      </form>
+  
+      <div *ngIf="success" class="success-message">{{ success }}</div>
+      <div *ngIf="error" class="error-message">{{ error }}</div>
+  
+      <div class="booking-info" *ngIf="tour">
+        <p><strong>Tour:</strong> {{ tour.name }}</p>
+        <p><strong>Flight To:</strong> {{ selectedFlightTo?.flight_number || selectedFlightTo?.firstLeg?.flight_number || 'N/A' }}</p>
+        <p><strong>Flight Back:</strong> {{ selectedFlightBack?.flight_number || selectedFlightBack?.firstLeg?.flight_number || 'N/A' }}</p>
+        <p><strong>Total Price:</strong> {{ tour.price }}$</p>
+      </div>
+    </div>
+  </section>
+  
