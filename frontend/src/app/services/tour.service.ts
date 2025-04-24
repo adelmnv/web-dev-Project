@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tour, Country, City, MealType, Application, Flight } from '../models/tour.model';
+import {
+  Tour,
+  Country,
+  City,
+  MealType,
+  Application,
+  Flight,
+} from '../models/tour.model';
+import { LoginResponse, RefreshTokenResponse } from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -113,9 +121,21 @@ export class TourService {
   updateTour(id: number, tour: Tour): Observable<Tour> {
     return this.http.put<Tour>(`${this.apiUrl}/tours/${id}/`, tour);
   }
-  
+
   deleteTour(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/tours/${id}/`);
   }
 
+  login(username: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login/`, {
+      username,
+      password,
+    });
+  }
+
+  refreshToken(token: string): Observable<{ access: string }> {
+    return this.http.post<{ access: string }>(`${this.apiUrl}/refresh/`, {
+      token,
+    });
+  }
 }
