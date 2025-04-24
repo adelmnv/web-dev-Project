@@ -13,6 +13,7 @@ import { TourDetailsComponent } from './app/pages/tour-details/tour-details.comp
 import { LoginComponent } from './app/pages/login/login.component';
 import { RequestsComponent } from './app/pages/requests/requests.component';
 import { BookComponent } from './app/pages/book/book.component';
+import { ApplicationsComponent } from './app/pages/applications/applications.component';
 
 
 bootstrapApplication(AppComponent, {
@@ -27,6 +28,7 @@ bootstrapApplication(AppComponent, {
       { path: 'login', component: LoginComponent },
       { path: 'requests', component: RequestsComponent },
       { path: 'book/:id', component: BookComponent },
+      {path: 'applications', component: ApplicationsComponent},
       { path: '**', redirectTo: '' },
     ]),
     provideHttpClient(),

@@ -55,9 +55,9 @@ export interface Country {
     name: string;
     phone: string;
     email: string;
-    tour: Tour;
-    flights_to: Flight[];
-    flights_back: Flight[];
+    tour: number;
+    flights_to: number[];
+    flights_back: number[];
     total_price: number;
     status: string;
     updated_at: Date;

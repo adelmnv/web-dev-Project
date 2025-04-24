@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TourService } from '../../services/tour.service'; // Import TourService
-import { Application } from '../../models/tour.model';
+import { Application, Tour, Flight } from '../../models/tour.model'; // Import Application, Tour, and Flight interfaces
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
@@ -16,6 +16,9 @@ export class ApplicationsComponent implements OnInit {
   applicationsNew: Application[] = [];
   applicationsPending: Application[] = [];
   applicationsProcessed: Application[] = [];
+  selectedApplication: Application | null = null; // State for selected application
+  selectedTour: Tour | null = null; // State for selected tour
+  selectedFlight: Flight | null = null; // State for selected flight
   error = '';
 
   constructor(private tourService: TourService) {}
@@ -37,6 +40,7 @@ export class ApplicationsComponent implements OnInit {
           (app) => app.status === 'approved' || app.status === 'rejected'
         );
       },
+
       error: (err) => {
         console.error(err);
         this.error = 'Failed to fetch applications. Please try again later.';
@@ -58,5 +62,37 @@ export class ApplicationsComponent implements OnInit {
           this.error = 'Failed to update application status. Please try again.';
         },
       });
+  }
+
+  openTourDetails(tourId: number): void {
+    this.tourService.getTourById(tourId).subscribe({
+      next: (tour) => {
+        this.selectedTour = tour;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Failed to fetch tour details.';
+      },
+    });
+  }
+
+  closeTourDetails(): void {
+    this.selectedTour = null;
+  }
+
+  openFlightDetails(flightId: number): void {
+    this.tourService.getFlightById(flightId).subscribe({
+      next: (flight) => {
+        this.selectedFlight = flight;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Failed to fetch flight details.';
+      },
+    });
+  }
+
+  closeFlightDetails(): void {
+    this.selectedFlight = null;
   }
 }

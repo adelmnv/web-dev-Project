@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tour, Country, City, MealType, Application } from '../models/tour.model';
+import { Tour, Country, City, MealType, Application, Flight } from '../models/tour.model';
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +73,10 @@ export class TourService {
     return this.http.get<any>(`${this.apiUrl}/find-flights/${params}`);
   }
 
+  getFlightById(id: number): Observable<Flight> {
+    return this.http.get<any>(`${this.apiUrl}/flights/${id}/`);
+  }
+
   getApplicationList(): Observable<Application[]> {
     return this.http.get<Application[]>(`${this.apiUrl}/applications/`);
   }
@@ -87,7 +91,7 @@ export class TourService {
       application
     );
   }
-  
+
   updateApplication(
     id: number,
     application: Application
