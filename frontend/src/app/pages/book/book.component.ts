@@ -25,6 +25,7 @@ export class BookComponent implements OnInit {
   selectedFlightTo: any = null;
   selectedFlightBack: any = null;
   total_price: number = 0;
+  showCustomAlert: boolean = false; // State for custom alert
 
   constructor(
     private http: HttpClient,
@@ -73,6 +74,9 @@ export class BookComponent implements OnInit {
         this.success = 'Thank you for booking with us!';
         this.error = '';
         this.bookingData = { name: '', phone: '', email: '' };
+
+        // Show custom alert
+        this.showCustomAlert = true;
       },
       error: (err) => {
         console.error(err);
@@ -80,5 +84,10 @@ export class BookComponent implements OnInit {
         this.success = '';
       },
     });
+  }
+
+  closeCustomAlert(): void {
+    this.showCustomAlert = false;
+    this.router.navigate(['/']); // Navigate to homepage after closing alert
   }
 }

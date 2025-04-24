@@ -135,7 +135,18 @@
           </tr>
         </tbody>
       </table>
-      <p><strong>Total Price (including flights):</strong> {{ total_price }}$</p>
+      <p>
+        <strong>Total Price (including flights):</strong> {{ total_price }}$
+      </p>
+    </div>
+
+    <!-- Custom Alert -->
+    <div *ngIf="showCustomAlert" class="custom-alert">
+      <div class="custom-alert-content">
+        <p>{{ success }}</p>
+        <p>Our manager will contact with you as soon as possible :)</p>
+        <button (click)="closeCustomAlert()">OK</button>
+      </div>
     </div>
 
     <!-- Booking Form -->
