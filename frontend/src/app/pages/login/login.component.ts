@@ -4,11 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { TourService } from '../../services/tour.service'; // Import TourService
-<<<<<<< HEAD
-=======
 
-
->>>>>>> a3ea004cb77debe80fb92ccc167b12c96963d507
 @Component({
   selector: 'app-login',
   standalone: true,
