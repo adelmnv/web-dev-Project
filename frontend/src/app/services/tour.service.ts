@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tour, Country, City, MealType } from '../models/tour.model';
 
@@ -48,22 +48,19 @@ export class TourService {
     return this.http.get<Tour[]>(`${this.apiUrl}/tours/?is_active=true`);
   }
 
-
   // Fetch tours by filters (meal type, duration, city)
-// In TourService
-findTours(
-  mealTypeId?: number,
-  duration?: number,
-  cityId?: number
-): Observable<Tour[]> {
-  let params: string[] = [];
-  if (mealTypeId) params.push(`meal_type_id=${mealTypeId}`);
-  if (duration) params.push(`duration=${duration}`);
-  if (cityId) params.push(`city_id=${cityId}`);
-  
-  const queryString = params.length ? `?${params.join('&')}` : '';
-  return this.http.get<Tour[]>(`${this.apiUrl}/find-tours${queryString}`);
-}
+  findTours(
+    mealTypeId?: number,
+    duration?: number,
+    cityId?: number
+  ): Observable<Tour[]> {
+    let params = [];
+    if (mealTypeId) params.push(`meal_type_id=${mealTypeId}`);
+    if (duration) params.push(`duration=${duration}`);
+    if (cityId) params.push(`city_id=${cityId}`);
+    const queryString = params.length ? `?${params.join('&')}` : '';
+    return this.http.get<Tour[]>(`${this.apiUrl}/find-tours/${queryString}`);
+  }
 
   // Fetch flights by origin, destination, and dates
   findFlights(
@@ -75,13 +72,4 @@ findTours(
     const params = `?origin_id=${originId}&destination_id=${destinationId}&departure_date=${departureDate}&return_date=${returnDate}`;
     return this.http.get<any>(`${this.apiUrl}/find-flights/${params}`);
   }
-
-  getToursFiltered(filters: any): Observable<Tour[]> {
-    const params = new HttpParams({ fromObject: filters });
-    return this.http.get<Tour[]>(`${this.apiUrl}/tours/filter`, { params });
-  }
-  
-  
-  
-  
 }

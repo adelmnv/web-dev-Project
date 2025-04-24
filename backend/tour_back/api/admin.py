@@ -39,9 +39,16 @@ class TourAdmin(admin.ModelAdmin):
 
 @admin.register(Application)
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'email', 'phone', 'tour', 'total_price', 'status', 'created_at', 'updated_at')
-    filter_horizontal = ('flights_to', 'flights_back')
+    list_display = ('id', 'name', 'email', 'phone', 'tour', 'get_flights_to', 'get_flights_back', 'total_price', 'status', 'created_at', 'updated_at')
     search_fields = ('name', 'email', 'phone', 'tour__name')
+
+    def get_flights_to(self, obj):
+        return ", ".join([f"{flight.airline} ({flight.flight_number})" for flight in obj.flights_to.all()])
+    get_flights_to.short_description = 'Flights To'
+
+    def get_flights_back(self, obj):
+        return ", ".join([f"{flight.airline} ({flight.flight_number})" for flight in obj.flights_back.all()])
+    get_flights_back.short_description = 'Flights Back'
 
 @admin.register(CustomRequest)
 class CustomRequestAdmin(admin.ModelAdmin):

@@ -6,6 +6,7 @@ import { TourListComponent } from './pages/tour-list/tour-list.component';
 import { TourDetailsComponent } from './pages/tour-details/tour-details.component';
 import { LoginComponent } from './pages/login/login.component';          
 import { RequestsComponent } from './pages/requests/requests.component'; 
+import { BookComponent } from './pages/book/book.component'; 
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,4 +17,5 @@ export const routes: Routes = [
   { path: 'tours/:id', component: TourDetailsComponent },
   { path: 'login', component: LoginComponent },      
   { path: 'requests', component: RequestsComponent }, 
+  { path: 'book/:id', component: BookComponent }, 
 ];

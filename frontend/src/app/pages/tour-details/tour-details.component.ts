@@ -21,13 +21,18 @@ export class TourDetailsComponent implements OnInit {
   connectingFlightsTo: { firstLeg: Flight; secondLeg: Flight }[] = [];
   flightsBack: Flight[] = [];
   connectingFlightsBack: { firstLeg: Flight; secondLeg: Flight }[] = [];
-  selectedFlightPair: { to: Flight; back: Flight } | null = null;
+
   selectedFlightTo: Flight | { firstLeg: Flight; secondLeg: Flight } | null =
     null;
   selectedFlightBack: Flight | { firstLeg: Flight; secondLeg: Flight } | null =
     null;
 
-    tourDetails: any
+  tourDetails: any;
+
+  showAlert: boolean = false;
+  alertMessage: string = '';
+
+  isLoadingFlights: boolean = false; // Add loading state for flights
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +60,7 @@ export class TourDetailsComponent implements OnInit {
       const returnDate = this.tourDetails.selectedReturnDate;
 
       if (destinationId && originId && departureDate && returnDate) {
+        this.isLoadingFlights = true; // Set loading state to true
         this.tourService
           .findFlights(originId, destinationId, departureDate, returnDate)
           .subscribe((flights) => {
@@ -81,14 +87,11 @@ export class TourDetailsComponent implements OnInit {
               'Transformed Connecting Flights back:',
               this.connectingFlightsBack
             );
+
+            this.isLoadingFlights = false; // Set loading state to false
           });
       }
     });
-  }
-
-  selectFlightPair(flightPair: { to: Flight; back: Flight }): void {
-    this.selectedFlightPair = flightPair;
-    console.log('Selected flight pair:', flightPair);
   }
 
   selectFlightTo(flight: Flight): void {
@@ -119,6 +122,72 @@ export class TourDetailsComponent implements OnInit {
 
   goBack(): void {
     history.back();
+  }
+
+  calculateTotalPrice(): number {
+    const tourPrice = Number(this.tour?.price || 0);
+
+    const flightToPrice = this.selectedFlightTo
+      ? 'price' in this.selectedFlightTo
+        ? Number(this.selectedFlightTo.price)
+        : Number(this.selectedFlightTo.firstLeg.price) +
+          Number(this.selectedFlightTo.secondLeg.price)
+      : 0;
+
+    const flightBackPrice = this.selectedFlightBack
+      ? 'price' in this.selectedFlightBack
+        ? Number(this.selectedFlightBack.price)
+        : Number(this.selectedFlightBack.firstLeg.price) +
+          Number(this.selectedFlightBack.secondLeg.price)
+      : 0;
+
+    return tourPrice + flightToPrice + flightBackPrice;
+  }
+
+  goToBooking(): void {
+    if (!this.selectedFlightTo || !this.selectedFlightBack) {
+      this.alertMessage =
+        'Please select both departure and return flights before booking.';
+      this.showAlert = true;
+      return;
+    }
+
+    if (this.tour?.id) {
+      const getFlightNumber = (flight: any): string => {
+        if (!flight) return 'N/A';
+        if (flight.flight_number) return flight.flight_number;
+        if (flight.firstLeg && flight.secondLeg) {
+          return `${flight.firstLeg.flight_number} + ${flight.secondLeg.flight_number}`;
+        }
+        return 'N/A';
+      };
+
+      // const bookingDetails = {
+      //   tour: this.tour,
+      //   selectedFlightTo: {
+      //     flight_number: getFlightNumber(this.selectedFlightTo),
+      //   },
+      //   selectedFlightBack: {
+      //     flight_number: getFlightNumber(this.selectedFlightBack),
+      //   },
+      //   total_price: this.calculateTotalPrice(),
+      // };
+
+      const bookingDetails = {
+        tour: this.tour,
+        selectedFlightTo: this.selectedFlightTo,
+        selectedFlightBack: this.selectedFlightBack,
+        total_price: this.calculateTotalPrice(),
+      };
+
+      localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+      console.log('Booking details saved to localStorage:', bookingDetails); // Debug log
+      this.router.navigate(['/book', this.tour.id]);
+    }
+  }
+
+  closeAlert(): void {
+    this.showAlert = false;
   }
 
   get images(): string[] {

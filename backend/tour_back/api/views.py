@@ -250,11 +250,30 @@ class ApplicationList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = ApplicationSerializer(data=request.data)
+        data = request.data.copy()
+
+        flights_to_data = data.pop('flights_to', [])
+        flights_back_data = data.pop('flights_back', [])
+
+        serializer = ApplicationSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            application = serializer.save()
+
+            # Save flights_to and flights_back
+            if flights_to_data:
+                flights_to = Flight.objects.filter(id__in=flights_to_data)
+                application.flights_to.set(flights_to)
+            if flights_back_data:
+                flights_back = Flight.objects.filter(id__in=flights_back_data)
+                application.flights_back.set(flights_back)
+
+            # Calculate and save the total price
+            application.total_price = application.calculate_total_price()
+            application.save()
+
+            return Response(ApplicationSerializer(application).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ApplicationDetail(APIView):
     def get_object(self, application_id):
