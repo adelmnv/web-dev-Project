@@ -162,6 +162,7 @@ button:hover {
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
+  margin-left: 20px;
 }
 .flex-container {
   display: flex;
