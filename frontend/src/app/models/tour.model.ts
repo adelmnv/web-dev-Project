@@ -49,4 +49,27 @@ export interface Country {
     meal_type: MealType;
     is_active: boolean;
   }
+
+  export interface Application{
+    id: number;
+    name: string;
+    phone: string;
+    email: string;
+    tour: Tour;
+    flights_to: Flight[];
+    flights_back: Flight[];
+    total_price: number;
+    status: string;
+    updated_at: Date;
+    created_at: Date;
+  }
+
+  export interface CustomRequest{
+    id: number;
+    name: string;
+    email: string;
+    message: string;
+    updated_at: Date;
+    created_at: Date;
+  }
   

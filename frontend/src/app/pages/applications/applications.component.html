@@ -1,0 +1,115 @@
+<app-navbar></app-navbar>
+<section class="applications">
+  <div class="container">
+    <h2>Applications</h2>
+
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+
+    <!-- New Applications -->
+    <h3>New Applications</h3>
+    <table class="application-table" *ngIf="applicationsNew.length > 0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Tour</th>
+          <th>Flights</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let app of applicationsNew">
+          <td>{{ app.name }}</td>
+          <td>{{ app.phone }}</td>
+          <td>{{ app.email }}</td>
+          <td>{{ app.tour.name }}</td>
+          <td>
+            <div *ngFor="let flight of app.flights_to">
+              To: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+            <div *ngFor="let flight of app.flights_back">
+              Back: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+          </td>
+          <td>{{ app.status }}</td>
+          <td>
+            <button (click)="updateStatus(app, 'pending')">
+              Mark as Pending
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pending Applications -->
+    <h3>Pending Applications</h3>
+    <table class="application-table" *ngIf="applicationsPending.length > 0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Tour</th>
+          <th>Flights</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let app of applicationsPending">
+          <td>{{ app.name }}</td>
+          <td>{{ app.phone }}</td>
+          <td>{{ app.email }}</td>
+          <td>{{ app.tour.name }}</td>
+          <td>
+            <div *ngFor="let flight of app.flights_to">
+              To: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+            <div *ngFor="let flight of app.flights_back">
+              Back: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+          </td>
+          <td>{{ app.status }}</td>
+          <td>
+            <button (click)="updateStatus(app, 'approved')">Approve</button>
+            <button (click)="updateStatus(app, 'rejected')">Reject</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Processed Applications -->
+    <h3>Processed Applications</h3>
+    <table class="application-table" *ngIf="applicationsProcessed.length > 0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Tour</th>
+          <th>Flights</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let app of applicationsProcessed">
+          <td>{{ app.name }}</td>
+          <td>{{ app.phone }}</td>
+          <td>{{ app.email }}</td>
+          <td>{{ app.tour.name }}</td>
+          <td>
+            <div *ngFor="let flight of app.flights_to">
+              To: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+            <div *ngFor="let flight of app.flights_back">
+              Back: {{ flight.airline }} ({{ flight.flight_number }})
+            </div>
+          </td>
+          <td>{{ app.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

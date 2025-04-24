@@ -1,37 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { TourService } from '../../services/tour.service'; // Import TourService
+import { CustomRequest } from '../../models/tour.model';
+
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './requests.component.html',
-  styleUrls: ['./requests.component.css']
+  styleUrls: ['./requests.component.css'],
 })
 export class RequestsComponent implements OnInit {
-  requests: any[] = [];
+  requests: CustomRequest[] = [];
+  error = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private tourService: TourService) {}
 
-  ngOnInit() {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.http.get('http://localhost:8000/api/custom-requests/', {
-        headers: { Authorization: `Bearer ${token}` }
-      }).subscribe((data: any) => {
-        this.requests = data;
-      });
-    }
+  ngOnInit(): void {
+    this.fetchRequests();
   }
 
-  updateRequest(id: number, field: string, value: string) {
-    const token = localStorage.getItem('token');
-    if (token) {
-      this.http.patch(`http://localhost:8000/api/custom-requests/${id}/`, { [field]: value }, {
-        headers: { Authorization: `Bearer ${token}` }
-      }).subscribe();
-    }
+  fetchRequests(): void {
+    this.tourService.getCustomRequestList().subscribe({
+      next: (data) => {
+        this.requests = data;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Failed to fetch requests. Please try again later.';
+      },
+    });
   }
 }

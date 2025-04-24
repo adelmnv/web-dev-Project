@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Tour, Country, City, MealType } from '../models/tour.model';
+import { Tour, Country, City, MealType, Application } from '../models/tour.model';
 
 @Injectable({
   providedIn: 'root',
@@ -72,4 +72,34 @@ export class TourService {
     const params = `?origin_id=${originId}&destination_id=${destinationId}&departure_date=${departureDate}&return_date=${returnDate}`;
     return this.http.get<any>(`${this.apiUrl}/find-flights/${params}`);
   }
+
+  getApplicationList(): Observable<Application[]> {
+    return this.http.get<Application[]>(`${this.apiUrl}/applications/`);
+  }
+
+  getApplicationById(id: number): Observable<Application> {
+    return this.http.get<Application>(`${this.apiUrl}/applications/${id}/`);
+  }
+
+  createApplication(application: Application): Observable<Application> {
+    return this.http.post<Application>(
+      `${this.apiUrl}/applications/`,
+      application
+    );
+  }
+  
+  updateApplication(
+    id: number,
+    application: Application
+  ): Observable<Application> {
+    return this.http.put<Application>(
+      `${this.apiUrl}/applications/${id}/`,
+      application
+    );
+  }
+
+  getCustomRequestList(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/custom-requests/`);
+  }
+
 }
