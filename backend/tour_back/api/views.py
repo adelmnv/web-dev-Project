@@ -259,11 +259,15 @@ class ApplicationList(APIView):
         if serializer.is_valid():
             application = serializer.save()
 
+            # Save flights_to and flights_back
             if flights_to_data:
-                application.flights_to.set(flights_to_data)
+                flights_to = Flight.objects.filter(id__in=flights_to_data)
+                application.flights_to.set(flights_to)
             if flights_back_data:
-                application.flights_back.set(flights_back_data)
+                flights_back = Flight.objects.filter(id__in=flights_back_data)
+                application.flights_back.set(flights_back)
 
+            # Calculate and save the total price
             application.total_price = application.calculate_total_price()
             application.save()
 

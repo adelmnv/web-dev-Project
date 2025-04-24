@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap");
 
 .book {
   padding: 60px 0;
   background: transparent;
-  font-family: 'Just Another Hand', cursive;
+  font-family: "Just Another Hand", cursive;
   color: #002244;
 }
 
@@ -32,7 +32,7 @@ form textarea {
   font-size: 1.6rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-family: 'Just Another Hand', cursive;
+  font-family: "Just Another Hand", cursive;
 }
 
 form button {
@@ -70,4 +70,57 @@ form button:hover {
   color: red;
   font-size: 1.6rem;
   margin-top: 10px;
+}
+
+.confirmation-section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.confirmation-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.tour-detail {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #555;
+}
+
+.flight-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.flight-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.flight-table th,
+.flight-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.flight-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.flight-table td {
+  font-size: 16px;
+  color: #333;
 }
