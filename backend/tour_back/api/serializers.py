@@ -36,15 +36,21 @@ class FlightSerializer(serializers.ModelSerializer):
         fields = ['id', 'airline', 'flight_number', 'departure', 'arrival', 'origin', 'destination', 'origin_id', 'destination_id','price', 'icon', 'created_at', 'updated_at']
 
 class ApplicationSerializer(serializers.ModelSerializer):
-    tour = TourSerializer(read_only=True)  # Include nested tour details
-    flights_to = FlightSerializer(many=True, read_only=True)  # Include nested flights to details
-    flights_back = FlightSerializer(many=True, read_only=True)  # Include nested flights back details
+    flights_to = serializers.PrimaryKeyRelatedField(
+        queryset=Flight.objects.all(), many=True, required=False
+    )
+    flights_back = serializers.PrimaryKeyRelatedField(
+        queryset=Flight.objects.all(), many=True, required=False
+    )
+
     class Meta:
         model = Application
         fields = [
             'id', 'name', 'email', 'phone', 'tour', 'flights_to', 'flights_back',
             'total_price', 'status', 'created_at', 'updated_at'
         ]
+
+
 
 class CustomRequestSerializer(serializers.ModelSerializer):
     class Meta:

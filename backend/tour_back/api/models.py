@@ -124,8 +124,9 @@ class Application(models.Model):
         return tour_price + flights_to_price + flights_back_price
 
     def save(self, *args, **kwargs):
-        self.total_price = self.calculate_total_price()
         super().save(*args, **kwargs)
+
+
 
 class CustomRequest(models.Model):
     name = models.CharField(max_length=100)

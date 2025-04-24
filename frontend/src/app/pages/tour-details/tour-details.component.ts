@@ -121,6 +121,38 @@ export class TourDetailsComponent implements OnInit {
     history.back();
   }
 
+  goToBooking(): void {
+    if (this.tour?.id) {
+      const getFlightNumber = (flight: any): string => {
+        if (!flight) return 'N/A';
+        if (flight.flight_number) return flight.flight_number; 
+        if (flight.firstLeg && flight.secondLeg) {
+          return `${flight.firstLeg.flight_number} + ${flight.secondLeg.flight_number}`;
+        }
+        return 'N/A';
+      };
+  
+      const bookingDetails = {
+        tour: this.tour,
+        selectedFlightTo: this.selectedFlightTo
+          ? {
+              flight_number: getFlightNumber(this.selectedFlightTo)
+            }
+          : null,
+        selectedFlightBack: this.selectedFlightBack
+          ? {
+              flight_number: getFlightNumber(this.selectedFlightBack)
+            }
+          : null
+      };
+  
+      localStorage.setItem('tourDetails', JSON.stringify(bookingDetails));
+      this.router.navigate(['/book', this.tour.id]);
+    }
+  }
+  
+  
+
   get images(): string[] {
     const hotelImages = this.tour?.hotel?.images || [];
     const cityImage = this.tour?.hotel?.city?.images || [];
