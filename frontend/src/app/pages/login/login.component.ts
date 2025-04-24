@@ -1,39 +1,42 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { TourService } from '../../services/tour.service'; // Import TourService
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a3ea004cb77debe80fb92ccc167b12c96963d507
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   username = '';
   password = '';
   error = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private tourService: TourService, private router: Router) {}
 
   login() {
-    console.log('🔐 Login clicked:', this.username, this.password);
+    // console.log('🔐 Login clicked:', this.username, this.password);
 
-    this.http.post('http://localhost:8000/api/login/', {
-      username: this.username,
-      password: this.password
-    }).subscribe({
-      next: (res: any) => {
+    this.tourService.login(this.username, this.password).subscribe({
+      next: (res) => {
         console.log('✅ Login success:', res);
         localStorage.setItem('token', res.access);
+        localStorage.setItem('refresh', res.refresh);
         this.router.navigate(['/requests']);
       },
       error: (err) => {
         console.error('❌ Login error:', err);
         this.error = err.error?.detail || 'Invalid credentials';
-      }
+      },
     });
   }
 }

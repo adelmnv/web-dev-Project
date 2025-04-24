@@ -3,11 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { TourService } from '../../services/tour.service'; // Import TourService
+import { Application } from '../../models/tour.model';
 
 @Component({
   selector: 'app-book',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.css'],
 })
@@ -30,7 +33,8 @@ export class BookComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private tourService: TourService // Inject TourService
   ) {}
 
   ngOnInit(): void {
@@ -48,11 +52,12 @@ export class BookComponent implements OnInit {
   }
 
   submitBooking(): void {
-    const payload = {
+    const application: Application = {
+      id: 0, // Placeholder, will be set by the backend
       name: this.bookingData.name,
       phone: this.bookingData.phone,
       email: this.bookingData.email,
-      tour: this.tour.id,
+      tour: this.tour.id, // Send only the tour ID
       flights_to: this.selectedFlightTo.id
         ? [this.selectedFlightTo.id]
         : [
@@ -65,11 +70,15 @@ export class BookComponent implements OnInit {
             this.selectedFlightBack.firstLeg.id,
             this.selectedFlightBack.secondLeg.id,
           ],
+      total_price: this.total_price,
+      status: 'new', // Default status
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
-    console.log('Payload:', payload); // Debug log
+    console.log('Application Payload:', application); // Debug log
 
-    this.http.post('/api/applications/', payload).subscribe({
+    this.tourService.createApplication(application).subscribe({
       next: () => {
         this.success = 'Thank you for booking with us!';
         this.error = '';

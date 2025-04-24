@@ -3,10 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+
+
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [CommonModule, FormsModule,NavbarComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent],
+>>>>>>> a3ea004cb77debe80fb92ccc167b12c96963d507
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
