@@ -92,13 +92,6 @@ export class TourListComponent implements OnInit {
       new Date(returnDate).getTime() - new Date(departureDate).getTime();
     return diffTime / (1000 * 3600 * 24); // Convert time difference to days
   }
-  getRandomHotelImage(tour: any): string | null {
-    const images = tour?.hotel?.images;
-    if (!images || images.length === 0) return null;
-
-    const randomIndex = Math.floor(Math.random() * images.length);
-    return images[randomIndex];
-  }
 
   shuffleArray(array: Tour[]): Tour[] {
     return array.sort(() => Math.random() - 0.5);

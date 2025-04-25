@@ -40,19 +40,6 @@
       <button (click)="resetFilters()">Reset Filters</button>
     </div>
 
-    <!-- Show filtered tours if any filters are applied 
-  <div class="tour-grid" *ngIf="filteredTours.length > 0">
-    <div *ngFor="let tour of filteredTours;let i = index" class="tour-card">
-      <div class="tour-img-wrapper" *ngIf="tour?.hotel?.images?.length">
-        <img [src]="tour.hotel.images[i%tour.hotel.images.length]" alt="Tour image" />
-      </div>      
-      <div *ngIf="!tour?.hotel?.images?.length">
-        No images available
-      </div>
-      </div>
-  </div>-->
-
-    <!-- Show all tours if no filters are applied or filteredTours is empty -->
     <div class="tour-grid">
       <div *ngFor="let tour of tours; let i = index" class="tour-card">
         <div class="tour-img-wrapper" *ngIf="tour?.hotel?.images?.length">
@@ -97,8 +84,6 @@
           </div>
         </div>
       </div>
-      <!-- tour-card -->
     </div>
-    <!-- tour-grid -->
   </div>
 </section>
