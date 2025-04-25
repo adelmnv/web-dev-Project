@@ -9,27 +9,31 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
   standalone: true,
   imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+  styleUrls: ['./contact.component.css'],
 })
 export class ContactComponent {
   contactData = {
     name: '',
     email: '',
-    message: ''
+    message: '',
   };
 
   constructor(private http: HttpClient) {}
 
   submitForm(): void {
-    this.http.post('http://localhost:8000/api/custom-requests/', this.contactData).subscribe({
-      next: () => {
-        alert(`Thank you, ${this.contactData.name}! We have received your message.`);
-        this.contactData = { name: '', email: '', message: '' };
-      },
-      error: (err) => {
-        //console.error('Failed to send contact request:', err);
-        alert('Failed to send message. Try again later.');
-      }
-    });
+    this.http
+      .post('http://localhost:8000/api/custom-requests/', this.contactData)
+      .subscribe({
+        next: () => {
+          alert(
+            `Thank you, ${this.contactData.name}! We have received your message.`
+          );
+          this.contactData = { name: '', email: '', message: '' };
+        },
+        error: (err) => {
+          //console.error('Failed to send contact request:', err);
+          alert('Failed to send message. Try again later.');
+        },
+      });
   }
 }
