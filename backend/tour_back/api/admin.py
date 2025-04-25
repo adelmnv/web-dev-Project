@@ -1,6 +1,6 @@
 from django.contrib import admin
 from api.models import Application, Country, City, CustomRequest, MealType, Flight, Hotel, Tour
-#comment
+
 @admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name','image', 'created_at', 'updated_at')

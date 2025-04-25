@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<section class="requests">
+<section class="requests" *ngIf="isAuthenticated; else loginMessage">
   <div class="container">
     <h2>Custom Requests</h2>
 
@@ -35,3 +35,6 @@
     </div>
   </div>
 </section>
+<ng-template #loginMessage>
+  <p>You need to be logged in to see this page</p>
+</ng-template>

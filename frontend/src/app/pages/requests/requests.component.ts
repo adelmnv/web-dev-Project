@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TourService } from '../../services/tour.service'; // Import TourService
+import { TourService } from '../../services/tour.service';
 import { CustomRequest } from '../../models/tour.model';
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-requests',
@@ -15,10 +15,19 @@ import { CustomRequest } from '../../models/tour.model';
 export class RequestsComponent implements OnInit {
   requests: CustomRequest[] = [];
   error = '';
+  isAuthenticated = false;
 
-  constructor(private tourService: TourService) {}
+  constructor(
+    private tourService: TourService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    console.log('Token from localStorage:', localStorage.getItem('token'));
+    if (!this.isAuthenticated) {
+      return;
+    }
     this.fetchRequests();
   }
 

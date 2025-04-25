@@ -1,12 +1,10 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import JsonResponse
 from api.models import Flight
-from django.db.models import Q
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Application, Country, City, CustomRequest, Flight, Hotel, Tour, MealType
 from .serializers import (
     ApplicationSerializer,
@@ -16,7 +14,7 @@ from .serializers import (
     FlightSerializer,
     HotelSerializer,
     TourSerializer,
-    MealTypeSerializer,  # Ensure this is correctly imported
+    MealTypeSerializer,
 )
 
 @api_view(http_method_names=['GET', 'POST'])
@@ -27,6 +25,8 @@ def country_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = CountrySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -45,6 +45,8 @@ def country_detail(request, country_id):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = CountrySerializer(instance=country, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -52,6 +54,8 @@ def country_detail(request, country_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         country.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -63,6 +67,8 @@ def meal_type_list(request):
         return Response(serializer.data)
 
     elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = MealTypeSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -81,6 +87,8 @@ def meal_type_detail(request, meal_type_id):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         serializer = MealTypeSerializer(instance=meal_type, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -88,10 +96,17 @@ def meal_type_detail(request, meal_type_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
+        if not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required for POST requests.'}, status=status.HTTP_403_FORBIDDEN)
         meal_type.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class CityList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+    
     def get(self, request):
         cities = City.objects.all()
         serializer = CitySerializer(cities, many=True)
@@ -110,6 +125,11 @@ class CityDetail(APIView):
             return City.objects.get(id=city_id)
         except City.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, city_id):
         city = self.get_object(city_id)
@@ -130,6 +150,11 @@ class CityDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class FlightList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+    
     def get(self, request):
         flights = Flight.objects.all()
         serializer = FlightSerializer(flights, many=True)
@@ -148,6 +173,11 @@ class FlightDetail(APIView):
             return Flight.objects.get(id=flight_id)
         except Flight.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, flight_id):
         flight = self.get_object(flight_id)
@@ -168,6 +198,11 @@ class FlightDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class HotelList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+    
     def get(self, request):
         hotels = Hotel.objects.all()
         serializer = HotelSerializer(hotels, many=True)
@@ -186,6 +221,11 @@ class HotelDetail(APIView):
             return Hotel.objects.get(id=hotel_id)
         except Hotel.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, hotel_id):
         hotel = self.get_object(hotel_id)
@@ -206,6 +246,11 @@ class HotelDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class TourList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+    
     def get(self, request):
         tours = Tour.objects.all()
         serializer = TourSerializer(tours, many=True)
@@ -224,6 +269,11 @@ class TourDetail(APIView):
             return Tour.objects.get(id=tour_id)
         except Tour.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, tour_id):
         tour = self.get_object(tour_id)
@@ -244,6 +294,11 @@ class TourDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ApplicationList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+    
     def get(self, request):
         applications = Application.objects.all()
         serializer = ApplicationSerializer(applications, many=True)
@@ -259,7 +314,6 @@ class ApplicationList(APIView):
         if serializer.is_valid():
             application = serializer.save()
 
-            # Save flights_to and flights_back
             if flights_to_data:
                 flights_to = Flight.objects.filter(id__in=flights_to_data)
                 application.flights_to.set(flights_to)
@@ -267,7 +321,6 @@ class ApplicationList(APIView):
                 flights_back = Flight.objects.filter(id__in=flights_back_data)
                 application.flights_back.set(flights_back)
 
-            # Calculate and save the total price
             application.total_price = application.calculate_total_price()
             application.save()
 
@@ -281,6 +334,11 @@ class ApplicationDetail(APIView):
             return Application.objects.get(id=application_id)
         except Application.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'GET' or self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, application_id):
         application = self.get_object(application_id)
@@ -300,20 +358,12 @@ class ApplicationDetail(APIView):
         application.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class LogoutView(APIView):
-    def post(self, request):
-        try:
-            refresh_token = request.data.get("refresh")
-            if not refresh_token:
-                return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 class CustomRequestList(APIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
     def get(self, request):
         custom_requests = CustomRequest.objects.all()
         serializer = CustomRequestSerializer(custom_requests, many=True)
@@ -332,6 +382,11 @@ class CustomRequestDetail(APIView):
             return CustomRequest.objects.get(id=request_id)
         except CustomRequest.DoesNotExist as e:
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+    
+    def get_permissions(self):
+        if self.request.method == 'GET' or self.request.method == 'PUT' or self.request.method == 'DELETE':
+            return [IsAuthenticated()]
+        return [AllowAny()]
     
     def get(self, request, request_id):
         custom_request = self.get_object(request_id)
@@ -355,40 +410,36 @@ class CustomRequestDetail(APIView):
 def find_flights(request):
     origin_id = request.GET.get('origin_id')
     destination_id = request.GET.get('destination_id')
-    departure_date = request.GET.get('departure_date')  # Format: YYYY-MM-DD
-    return_date = request.GET.get('return_date')  # Format: YYYY-MM-DD
+    departure_date = request.GET.get('departure_date')
+    return_date = request.GET.get('return_date')
 
-    # Log the received parameters
-    print(f"Origin ID: {origin_id}, Destination ID: {destination_id}, Departure Date: {departure_date}, Return Date: {return_date}")
+    ##print(f"Origin ID: {origin_id}, Destination ID: {destination_id}, Departure Date: {departure_date}, Return Date: {return_date}")
 
     if not all([origin_id, destination_id, departure_date, return_date]):
         return JsonResponse({'error': 'All parameters: origin_id, destination_id, departure_date, return_date are required.'}, status=400)
 
-    # Validate that the departure date is earlier than the return date
     if departure_date >= return_date:
         return JsonResponse({'error': 'Departure date must be earlier than return date'}, status=400)
 
     try:
-        # Fetch only the first 3 direct flights to the destination
         flights_to = Flight.objects.filter(
             origin_id=origin_id,
             destination_id=destination_id,
-            departure__date=departure_date  # Match only the date part
-        )[:3]  # Limit to the first 3 results
+            departure__date=departure_date
+        )[:3]
 
-        # Fetch only the first 3 direct return flights
         flights_back = Flight.objects.filter(
             origin_id=destination_id,
             destination_id=origin_id,
-            departure__date=return_date  # Match only the date part
-        )[:3]  # Limit to the first 3 results
+            departure__date=return_date
+        )[:3]
 
-        # If no direct flights are found, search for connecting flights
+        # Search for connecting flights
         if not flights_to.exists():
             connecting_flights_to = Flight.objects.filter(
                 origin_id=origin_id,
                 departure__date=departure_date
-            ).exclude(destination_id=origin_id)  # Exclude flights returning to the origin
+            ).exclude(destination_id=origin_id)
 
             connecting_flights_to = [
                 {
@@ -401,8 +452,8 @@ def find_flights(request):
                     destination_id=destination_id,
                     departure__date=departure_date
                 )
-                if first_leg.arrival < second_leg.departure  # Ensure connection timing is valid
-            ][:3]  # Limit to the first 3 connecting options
+                if first_leg.arrival < second_leg.departure
+            ][:3]
 
         else:
             connecting_flights_to = []
@@ -411,7 +462,7 @@ def find_flights(request):
             connecting_flights_back = Flight.objects.filter(
                 origin_id=destination_id,
                 departure__date=return_date
-            ).exclude(destination_id=destination_id)  # Exclude flights returning to the destination
+            ).exclude(destination_id=destination_id)
 
             connecting_flights_back = [
                 {
@@ -424,15 +475,15 @@ def find_flights(request):
                     destination_id=origin_id,
                     departure__date=return_date
                 )
-                if first_leg.arrival < second_leg.departure  # Ensure connection timing is valid
-            ][:3]  # Limit to the first 3 connecting options
+                if first_leg.arrival < second_leg.departure
+            ][:3]
 
         else:
             connecting_flights_back = []
 
-        # Log the number of flights found
-        print(f"Direct Flights to: {len(flights_to)}, Connecting Flights to: {len(connecting_flights_to)}")
-        print(f"Direct Flights back: {len(flights_back)}, Connecting Flights back: {len(connecting_flights_back)}")
+
+        ##print(f"Direct Flights to: {len(flights_to)}, Connecting Flights to: {len(connecting_flights_to)}")
+        ##print(f"Direct Flights back: {len(flights_back)}, Connecting Flights back: {len(connecting_flights_back)}")
 
         flights_to_data = FlightSerializer(flights_to, many=True).data
         flights_back_data = FlightSerializer(flights_back, many=True).data
@@ -461,8 +512,7 @@ def find_flights(request):
         })
 
     except Exception as e:
-        # Log the exception
-        print(f"Error in find_flights: {str(e)}")
+        ##print(f"Error in find_flights: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
 
 @api_view(http_method_names=['GET'])

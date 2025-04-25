@@ -1,8 +1,8 @@
 export interface LoginResponse {
-  access: string; // JWT access token
-  refresh: string; // JWT refresh token
+  access: string;
+  refresh: string;
 }
 
 export interface RefreshTokenResponse {
-  access: string; // New JWT access token
+  access: string;
 }

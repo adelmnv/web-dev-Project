@@ -27,7 +27,7 @@ export class ContactComponent {
         this.contactData = { name: '', email: '', message: '' };
       },
       error: (err) => {
-        console.error('❌ Failed to send contact request:', err);
+        //console.error('Failed to send contact request:', err);
         alert('Failed to send message. Try again later.');
       }
     });

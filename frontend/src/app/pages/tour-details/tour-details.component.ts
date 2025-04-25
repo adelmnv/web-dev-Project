@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TourService } from '../../services/tour.service';
 import { Flight, Tour } from '../../models/tour.model';
-import { NgFor } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
@@ -32,7 +31,7 @@ export class TourDetailsComponent implements OnInit {
   showAlert: boolean = false;
   alertMessage: string = '';
 
-  isLoadingFlights: boolean = false; // Add loading state for flights
+  isLoadingFlights: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,15 +43,15 @@ export class TourDetailsComponent implements OnInit {
     const data = localStorage.getItem('tourDetails');
     if (data) {
       this.tourDetails = JSON.parse(data);
-      console.log('Tour details from localStorage:', this.tourDetails); // Debug log
+      //console.log('Tour details from localStorage:', this.tourDetails);
     } else {
-      console.error('No tour details found in localStorage'); // Debug log
+      //console.error('No tour details found in localStorage');
     }
 
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.tourService.getTourById(id).subscribe((tour) => {
       this.tour = tour;
-      console.log('Tour details:', this.tour); // Debug log
+      //console.log('Tour details:', this.tour);
 
       const originId = this.tourDetails.selectedOriginId;
       const destinationId = this.tour?.hotel?.city?.id || 0;
@@ -60,7 +59,7 @@ export class TourDetailsComponent implements OnInit {
       const returnDate = this.tourDetails.selectedReturnDate;
 
       if (destinationId && originId && departureDate && returnDate) {
-        this.isLoadingFlights = true; // Set loading state to true
+        this.isLoadingFlights = true;
         this.tourService
           .findFlights(originId, destinationId, departureDate, returnDate)
           .subscribe((flights) => {
@@ -71,10 +70,10 @@ export class TourDetailsComponent implements OnInit {
               firstLeg: connection.first_leg,
               secondLeg: connection.second_leg,
             }));
-            console.log(
-              'Transformed Connecting Flights to:',
-              this.connectingFlightsTo
-            );
+            // console.log(
+            //   'Transformed Connecting Flights to:',
+            //   this.connectingFlightsTo
+            // );
 
             this.flightsBack = flights.flights_back || [];
             this.connectingFlightsBack = (
@@ -83,12 +82,12 @@ export class TourDetailsComponent implements OnInit {
               firstLeg: connection.first_leg,
               secondLeg: connection.second_leg,
             }));
-            console.log(
-              'Transformed Connecting Flights back:',
-              this.connectingFlightsBack
-            );
+            // console.log(
+            //   'Transformed Connecting Flights back:',
+            //   this.connectingFlightsBack
+            // );
 
-            this.isLoadingFlights = false; // Set loading state to false
+            this.isLoadingFlights = false;
           });
       }
     });
@@ -96,7 +95,7 @@ export class TourDetailsComponent implements OnInit {
 
   selectFlightTo(flight: Flight): void {
     this.selectedFlightTo = flight;
-    console.log('Selected direct flight to:', flight);
+    //console.log('Selected direct flight to:', flight);
   }
 
   selectConnectingFlightTo(connection: {
@@ -104,12 +103,12 @@ export class TourDetailsComponent implements OnInit {
     secondLeg: Flight;
   }): void {
     this.selectedFlightTo = connection;
-    console.log('Selected connecting flight to:', connection);
+    //console.log('Selected connecting flight to:', connection);
   }
 
   selectFlightBack(flight: Flight): void {
     this.selectedFlightBack = flight;
-    console.log('Selected direct flight back:', flight);
+    //console.log('Selected direct flight back:', flight);
   }
 
   selectConnectingFlightBack(connection: {
@@ -117,7 +116,7 @@ export class TourDetailsComponent implements OnInit {
     secondLeg: Flight;
   }): void {
     this.selectedFlightBack = connection;
-    console.log('Selected connecting flight back:', connection);
+    //console.log('Selected connecting flight back:', connection);
   }
 
   goBack(): void {
@@ -162,17 +161,6 @@ export class TourDetailsComponent implements OnInit {
         return 'N/A';
       };
 
-      // const bookingDetails = {
-      //   tour: this.tour,
-      //   selectedFlightTo: {
-      //     flight_number: getFlightNumber(this.selectedFlightTo),
-      //   },
-      //   selectedFlightBack: {
-      //     flight_number: getFlightNumber(this.selectedFlightBack),
-      //   },
-      //   total_price: this.calculateTotalPrice(),
-      // };
-
       const bookingDetails = {
         tour: this.tour,
         selectedFlightTo: this.selectedFlightTo,
@@ -181,7 +169,7 @@ export class TourDetailsComponent implements OnInit {
       };
 
       localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
-      console.log('Booking details saved to localStorage:', bookingDetails); // Debug log
+      //console.log('Booking details saved to localStorage:', bookingDetails);
       this.router.navigate(['/book', this.tour.id]);
     }
   }

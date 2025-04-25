@@ -8,37 +8,38 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { TourService } from '../services/tour.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private tourService: TourService) {}
+  constructor(private authService: AuthService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+    //console.log('Interceptor triggered for URL:', req.url);
 
+    const token = localStorage.getItem('token');
     let authReq = req;
-    if (token) {
-      // Clone the request and add the Authorization header
+
+    if (token && !req.url.includes('/login') && !req.url.includes('/refresh')) {
       authReq = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`,
         },
       });
+      //console.log('AuthInterceptor: Added Authorization header', authReq);
     }
 
     return next.handle(authReq).pipe(
       catchError((error: HttpErrorResponse) => {
+        //console.error('AuthInterceptor: Error occurred', error);
         if (error.status === 401) {
-          // If the token is expired, attempt to refresh it
           const refreshToken = localStorage.getItem('refresh');
           if (refreshToken) {
-            return this.tourService.refreshToken(refreshToken).pipe(
+            return this.authService.refreshToken(refreshToken).pipe(
               switchMap((res) => {
-                // Save the new token and retry the failed request
                 localStorage.setItem('token', res.access);
                 const newAuthReq = req.clone({
                   setHeaders: {
@@ -48,18 +49,16 @@ export class AuthInterceptor implements HttpInterceptor {
                 return next.handle(newAuthReq);
               }),
               catchError((refreshError) => {
-                // If refreshing the token fails, log out the user
                 localStorage.removeItem('token');
                 localStorage.removeItem('refresh');
-                window.location.href = '/login'; // Redirect to login page
+                window.location.href = '/login';
                 return throwError(refreshError);
               })
             );
           } else {
-            // If no refresh token is available, log out the user
             localStorage.removeItem('token');
             localStorage.removeItem('refresh');
-            window.location.href = '/login'; // Redirect to login page
+            window.location.href = '/login';
           }
         }
         return throwError(error);

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TourService } from '../../services/tour.service'; // Import TourService
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,20 +17,18 @@ export class LoginComponent {
   password = '';
   error = '';
 
-  constructor(private tourService: TourService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    // console.log('🔐 Login clicked:', this.username, this.password);
-
-    this.tourService.login(this.username, this.password).subscribe({
+    this.authService.login(this.username, this.password).subscribe({
       next: (res) => {
-        console.log('✅ Login success:', res);
+        console.log('Login success:', res);
         localStorage.setItem('token', res.access);
         localStorage.setItem('refresh', res.refresh);
         this.router.navigate(['/requests']);
       },
       error: (err) => {
-        console.error('❌ Login error:', err);
+        console.error('Login error:', err);
         this.error = err.error?.detail || 'Invalid credentials';
       },
     });

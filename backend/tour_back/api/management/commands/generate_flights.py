@@ -9,7 +9,6 @@ class Command(BaseCommand):
     help = 'Generate realistic round-trip and connecting flights between cities with prices and schedules until August'
 
     def handle(self, *args, **kwargs):
-        # Delete all existing flights
         Flight.objects.all().delete()
         self.stdout.write(self.style.WARNING('Deleted all existing flights.'))
 
@@ -34,7 +33,7 @@ class Command(BaseCommand):
         }
 
         today = timezone.now().date()
-        end_date = datetime(today.year, 6, 1).date()  # Generate flights until July 1st
+        end_date = datetime(today.year, 6, 1).date()
 
         for origin in cities:
             for destination in cities:

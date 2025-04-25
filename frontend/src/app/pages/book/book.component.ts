@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { TourService } from '../../services/tour.service'; // Import TourService
+import { TourService } from '../../services/tour.service';
 import { Application } from '../../models/tour.model';
 
 @Component({
@@ -28,13 +27,12 @@ export class BookComponent implements OnInit {
   selectedFlightTo: any = null;
   selectedFlightBack: any = null;
   total_price: number = 0;
-  showCustomAlert: boolean = false; // State for custom alert
+  showCustomAlert: boolean = false;
 
   constructor(
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private tourService: TourService // Inject TourService
+    private tourService: TourService
   ) {}
 
   ngOnInit(): void {
@@ -53,11 +51,11 @@ export class BookComponent implements OnInit {
 
   submitBooking(): void {
     const application: Application = {
-      id: 0, // Placeholder, will be set by the backend
+      id: 0, // will be set by the backend
       name: this.bookingData.name,
       phone: this.bookingData.phone,
       email: this.bookingData.email,
-      tour: this.tour.id, // Send only the tour ID
+      tour: this.tour.id, // only tour id
       flights_to: this.selectedFlightTo.id
         ? [this.selectedFlightTo.id]
         : [
@@ -71,12 +69,12 @@ export class BookComponent implements OnInit {
             this.selectedFlightBack.secondLeg.id,
           ],
       total_price: this.total_price,
-      status: 'new', // Default status
+      status: 'new',
       created_at: new Date(),
       updated_at: new Date(),
     };
 
-    console.log('Application Payload:', application); // Debug log
+    //console.log('Application Payload:', application);
 
     this.tourService.createApplication(application).subscribe({
       next: () => {
@@ -84,7 +82,6 @@ export class BookComponent implements OnInit {
         this.error = '';
         this.bookingData = { name: '', phone: '', email: '' };
 
-        // Show custom alert
         this.showCustomAlert = true;
       },
       error: (err) => {
@@ -97,6 +94,6 @@ export class BookComponent implements OnInit {
 
   closeCustomAlert(): void {
     this.showCustomAlert = false;
-    this.router.navigate(['/']); // Navigate to homepage after closing alert
+    this.router.navigate(['/']);
   }
 }

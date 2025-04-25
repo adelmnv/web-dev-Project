@@ -1,5 +1,5 @@
 <app-navbar></app-navbar>
-<section class="applications">
+<section class="applications" *ngIf="isAuthenticated; else loginMessage">
   <div class="container">
     <h2>Applications</h2>
 
@@ -266,3 +266,6 @@
     </div>
   </div>
 </section>
+<ng-template #loginMessage>
+  <p>You need to be logged in to see this page</p>
+</ng-template>

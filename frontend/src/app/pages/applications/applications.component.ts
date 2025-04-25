@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TourService } from '../../services/tour.service'; // Import TourService
-import { Application, Tour, Flight } from '../../models/tour.model'; // Import Application, Tour, and Flight interfaces
+import { TourService } from '../../services/tour.service';
+import { Application, Tour, Flight } from '../../models/tour.model';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-applications',
@@ -16,14 +16,19 @@ export class ApplicationsComponent implements OnInit {
   applicationsNew: Application[] = [];
   applicationsPending: Application[] = [];
   applicationsProcessed: Application[] = [];
-  selectedApplication: Application | null = null; // State for selected application
-  selectedTour: Tour | null = null; // State for selected tour
-  selectedFlight: Flight | null = null; // State for selected flight
+  selectedApplication: Application | null = null;
+  selectedTour: Tour | null = null;
+  selectedFlight: Flight | null = null;
   error = '';
-
-  constructor(private tourService: TourService) {}
+  isAuthenticated = false;
+  
+  constructor(private tourService: TourService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    if (!this.isAuthenticated) {
+      return;
+    }
     this.fetchApplications();
   }
 
@@ -55,7 +60,7 @@ export class ApplicationsComponent implements OnInit {
       .updateApplication(updatedApplication.id, updatedApplication)
       .subscribe({
         next: () => {
-          this.fetchApplications(); // Refresh the list after updating
+          this.fetchApplications();
         },
         error: (err) => {
           console.error(err);

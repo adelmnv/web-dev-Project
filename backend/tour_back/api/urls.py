@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import ApplicationDetail, ApplicationList, CityDetail, CityList, country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList,TourDetail, LogoutView, CustomRequestList, CustomRequestDetail, find_flights, find_tours
+from api.views import ApplicationDetail, ApplicationList, CityDetail, CityList, country_list, country_detail, meal_type_list, meal_type_detail, FlightList, FlightDetail, HotelList, HotelDetail, TourList,TourDetail, CustomRequestList, CustomRequestDetail, find_flights, find_tours
 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -26,5 +26,4 @@ urlpatterns = [
 
     path('login/', TokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
-    path('logout/', LogoutView.as_view(), name='logout'),
 ]

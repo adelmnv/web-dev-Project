@@ -96,11 +96,7 @@ class Tour(models.Model):
     def clean(self):
         if self.start_date >= self.end_date:
             raise ValidationError("Start date must be before end date.")
-        
-    # def find_appropriate_flights(self):
-    #     flights_to = Flight.objects.filter(departure__date=self.start_date)
-    #     flights_back = Flight.objects.filter(arrival__date=self.end_date)
-    #     return flights_to, flights_back
+
 
 class Application(models.Model):
     name = models.CharField(max_length=100)
@@ -122,10 +118,6 @@ class Application(models.Model):
         flights_to_price = sum(flight.price for flight in self.flights_to.all())
         flights_back_price = sum(flight.price for flight in self.flights_back.all())
         return tour_price + flights_to_price + flights_back_price
-
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-
 
 
 class CustomRequest(models.Model):

@@ -8,13 +8,13 @@
       <li><a routerLink="/tours">Tours</a></li>
       <li><a routerLink="/about">About</a></li>
       <li><a routerLink="/reviews">Reviews</a></li>
-      <li><a routerLink="/contact">Contact</a></li>
+      <li *ngIf="!isAuthenticated"><a routerLink="/contact">Contact</a></li>
       <li *ngIf="!isAuthenticated"><a routerLink="/login">Login</a></li>
       <li *ngIf="isAuthenticated">
         <a routerLink="/applications">Applications</a>
       </li>
       <li *ngIf="isAuthenticated"><a routerLink="/requests">Requests</a></li>
-      <li *ngIf="isAuthenticated"><a href="#" (click)="logout()">Logout</a></li>
+      <li *ngIf="isAuthenticated"><a href="#" (click)="$event.preventDefault(); logout()">Logout</a></li>
     </ul>
   </div>
 </nav>

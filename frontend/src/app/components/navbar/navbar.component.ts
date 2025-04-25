@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../../services/auth.service'; // Import AuthService
 
 @Component({
   selector: 'app-navbar',
@@ -15,8 +16,8 @@ export class NavbarComponent {
   @Output() search = new EventEmitter<string>();
   isAuthenticated = false;
 
-  constructor(private router: Router) {
-    this.isAuthenticated = !!localStorage.getItem('token'); // Check if a token exists
+  constructor(private authService: AuthService, private router: Router) {
+    this.isAuthenticated = this.authService.isAuthenticated();
   }
 
   onSearch() {
@@ -24,9 +25,8 @@ export class NavbarComponent {
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // Remove the token
-    localStorage.removeItem('refresh'); // Remove the refresh token if stored
-    this.isAuthenticated = false; // Update the authentication state
-    this.router.navigate(['/home']); // Redirect to home
+    this.authService.logout();
+    this.isAuthenticated = false;
+    this.router.navigate(['/home']);
   }
 }
